@@ -1,2 +1,2 @@
-# car-race
-A car race guided by artificial intelligence 
+# others projects by Assaj in [cin.ufpe.br/~assaj](cin.ufpe.br/~assaj)
+
