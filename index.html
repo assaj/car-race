@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Em testes</title>
+</head>
+<body>
+<canvas id="stage" width="600" height="600"></canvas>
+<script type="text/javascript">
+
+var time = 100, sqrtSize = 10, ctx, stage;
+
+window.onload = function(){
+	stage = document.getElementById('stage');
+	ctx = stage.getContext("2d");
+
+	ctx.fillStyle = "grey";
+	ctx.fillRect(0,0, stage.width, stage.height);
+
+}
+setInterval(run,time);
+
+function run(){
+	ctx.fillStyle = "grey";
+    ctx.fillRect(0,0, stage.width, stage.height);
+
+	ctx.fillStyle = "yellow";
+	ctx.fillRect(100,100,400,400);
+
+	ctx.fillStyle = "green";
+	ctx.fillRect(0,480,100,20);
+}
+</script>
+</body>
+</html>
+
