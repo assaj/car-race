@@ -7,19 +7,28 @@
 <canvas id="stage" width="600" height="600"></canvas>
 <script type="text/javascript">
 
-var time = 100, sqrtSize = 10, ctx, stage;
-
+var time = 500, sqrtSize = 10, ctx, stage,numberOfPlayers = 1, colisorNumber;
+var px = [],py = [], alive = [], a, setOfColors = ["","red","blue","black","white","pink"];
 window.onload = function(){
 	stage = document.getElementById('stage');
 	ctx = stage.getContext("2d");
 
 	ctx.fillStyle = "grey";
 	ctx.fillRect(0,0, stage.width, stage.height);
-
+	newPlayer();
+	newPlayer();
+	newPlayer();
+	newPlayer();
+	newPlayer();
 }
 setInterval(run,time);
 
 function run(){
+	
+	playerMovement(a,1);
+	killPlayer(1);
+	score(1);
+
 	ctx.fillStyle = "grey";
     ctx.fillRect(0,0, stage.width, stage.height);
 
@@ -28,7 +37,84 @@ function run(){
 
 	ctx.fillStyle = "green";
 	ctx.fillRect(0,480,100,20);
+
+	for(var x = 1; x <= numberOfPlayers; x++){
+		if(alive[x]){
+		ctx.fillStyle = setOfColors[x];
+		ctx.fillRect(px[x],py[x],20,20);//X,Y,WIDTH,HEIGHT
+		}
+	}
 }
+
+function playerMovement(
+	movement, playerNumber) {
+	switch(movement){
+		case "r":
+			px[playerNumber]+=20;
+		break;
+		case "l":
+			px[playerNumber]-=20;
+		break;
+		case "u":
+			py[playerNumber]-=20;
+		break;
+		case "d":
+			py[playerNumber]+=20;
+		break;
+	}
+}
+
+function newPlayer(){
+	if(numberOfPlayers > 5){
+		alert("The max number of player is 5.");
+	}else{
+		px[numberOfPlayers] = (numberOfPlayers-1) * 20;
+		py[numberOfPlayers] = 460;
+		alive[numberOfPlayers] = true;
+		numberOfPlayers++;
+	}
+}
+
+function gameReset(){
+	let gameOn = false;
+	for(var i = 0; i < numberOfPlayers; i++){
+		if(alive[i]){
+		 	gameOn = true;
+		}
+	}
+	if(!gameOn){
+		for(var x = 0; x < numberOfPlayers; x++){
+
+		}
+	}
+}
+function killPlayer(playerNumber){
+	if(px[playerNumber] >= 100 && py[playerNumber] >= 100 && py[playerNumber] < 500 && px[playerNumber] < 500){
+		alive[playerNumber] = false;
+	}
+
+	if(inColision(playerNumber)){
+		alive[colisorNumber] = false;
+		alive[playerNumber] = false;
+	}
+}
+
+function inColision(playerNumber){
+
+	for(var x = 1; x <= numberOfPlayers; x++){
+		if(x != playerNumber){
+			if(px[x] == px[playerNumber] && py[x] == py[playerNumber]){
+				colisorNumber = x;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+function score(playerNumber){
+
+}
+
 </script>
 </body>
 </html>
