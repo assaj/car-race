@@ -8,7 +8,7 @@
 	<button onclick="gameReset()">Reset</button>
 <canvas id="stage" width="600" height="600"></canvas>
 <script type="text/javascript">
-var time = 500, sqrtSize = 10, ctx, stage,numberOfPlayers = 1, colisorNumber;
+var time = 200, sqrtSize = 10, ctx, stage,numberOfPlayers = 1, colisorNumber, setOfTests,  testNumber, testSize = 500, testMoves = [], testSave = [], testTime, setOfTests = [], setOfScores = [];
 var px = [],py = [], alive = [],score = [], setOfColors = ["","red","blue","black","white","pink"], lastYPosition;
 window.onload = function(){
 	stage = document.getElementById('stage');
@@ -16,49 +16,75 @@ window.onload = function(){
 	ctx.fillStyle = "grey";
 	ctx.fillRect(0,0, stage.width, stage.height);
 	newPlayer();
+	testNumber = 0;
+	testTime = 0;
 	
 }
 setInterval(run,time);
 function run(){
-	
+
 	ctx.fillStyle = "grey";
     ctx.fillRect(0,0, stage.width, stage.height);
 	ctx.fillStyle = "yellow";
 	ctx.fillRect(100,100,400,400);
 	ctx.fillStyle = "green";
 	ctx.fillRect(0,480,100,20);
-	for(var x = 1; x < numberOfPlayers; x++){
-			randomMove(x);
-			killPlayer(x);
+	for(let x = 1; x < numberOfPlayers; x++){
 			if(alive[x]){
-				setScore(x);
+				killPlayer(x);
+				if(alive[x]){
+					setScore(x);
+					rightMove(x);
+				}
 			}
 	}	
-	for(var x = 1; x <= numberOfPlayers; x++){
+	for(let x = 1; x <= numberOfPlayers; x++){
 		if(alive[x]){
-		ctx.fillStyle = setOfColors[x];
-		ctx.fillRect(px[x],py[x],20,20);//X,Y,WIDTH,HEIGHT
+			paintPlayer(x);
 		}
+	}
+	gameReset();
+	testTime ++;
+}
+function paintPlayer(playerNumber){
+	ctx.fillStyle = setOfColors[playerNumber];
+	ctx.fillRect(px[playerNumber],py[playerNumber],20,20);//X,Y,WIDTH,HEIGHT
+}
+function rightMove(playerNumber){
+	let x = Math.floor((Math.random() * 10) + 1);
+	if(x == 1){
+		randomMove(playerNumber);
+	}else{
+		randomMove(playerNumber);
+		//console.log(setOfTests[playerNumber][testNumber%12][testTime%11]);
+		//if(setOfTests[playerNumber][testNumber%12][testTime%11] != 0){
+		//	playerNumber(setOfTests[playerNumber][testNumber%12][testTime%11],playerNumber)
+		//}else{
+		//	randomMove(playerNumber);
+		//}
 	}
 }
 function playerMovement(
 	movement, playerNumber) {
-
+		saveMovement(playerNumber, movement);
 		lastYPosition = py[playerNumber];
 	switch(movement){
-		case "r":
+		case 1://right
 			px[playerNumber]+=20;
 		break;
-		case "l":
+		case 2://left
 			px[playerNumber]-=20;
 		break;
-		case "u":
+		case 3://up
 			py[playerNumber]-=20;
 		break;
-		case "d":
+		case 4://down
 			py[playerNumber]+=20;
 		break;
 	}
+}
+function saveMovement(playerNumber, movement){
+	testMoves[playerNumber][testTime]= movement;
 }
 function newPlayer(){
 	if(numberOfPlayers > 5){
@@ -68,24 +94,37 @@ function newPlayer(){
 		py[numberOfPlayers] = 460;
 		alive[numberOfPlayers] = true;
 		score[numberOfPlayers] = 0.0;
+		testMoves[numberOfPlayers] = [];
+		setOfTests[numberOfPlayers] = [];
+		setOfScores[numberOfPlayers] = [];
+
 		numberOfPlayers++;
 	}
 }
 function gameReset(){
 	let gameOn = false;
-	for(var i = 1; i < numberOfPlayers ; i++){
-		console.log(i);
+	for(let i = 1; i < numberOfPlayers ; i++){
 		if(alive[i]){
 		 	gameOn = true;
 		}
 	}
-	if(!gameOn){
-		for(var x = 1; x < numberOfPlayers ; x++){
+	if(!gameOn || testTime > testSize){
+		for(let x = 1; x < numberOfPlayers ; x++){
+			constructor(testMoves[x],score[x],x);
 			px[x] = (x-1) * 20;
 			py[x] = 460;
 			alive[x] = true;
 			score[x] = 0;
+			clearMoves(x);
+			paintPlayer(x);		
 		}
+		testTime = 0;
+		testNumber++;
+	}
+}
+function clearMoves(playerNumber){
+	for(let i = 0; i < 200; i++){
+		testMoves[playerNumber][i] = 0;
 	}
 }
 function killPlayer(playerNumber){
@@ -116,7 +155,7 @@ function foul(playerNumber){
 	}
 }
 function inColision(playerNumber){
-	for(var x = 1; x <= numberOfPlayers; x++){
+	for(let x = 1; x <= numberOfPlayers; x++){
 		if(x != playerNumber){
 			if(px[x] == px[playerNumber] && py[x] == py[playerNumber]){
 				colisorNumber = x;
@@ -128,24 +167,10 @@ function inColision(playerNumber){
 }
 function randomMove(playerNumber){
 	let x = Math.floor((Math.random() * 4) + 1);
-	switch(x){
-		case 1:
-			playerMovement("r",playerNumber);
-		break;
-		case 2:
-			playerMovement("l",playerNumber);
-		break;
-		case 3:
-			playerMovement("u",playerNumber);
-		break;
-		case 4:
-			playerMovement("u",playerNumber);
-		break;
-	}
+	playerMovement(x,playerNumber)
 }
 
 function setScore(playerNumber){
-	
 	if(px[playerNumber] < 200 && py[playerNumber] > 100 && py[playerNumber] < 500){
 		score[playerNumber] += 23 -py[playerNumber]/20 ;
 	}else if(px[playerNumber] > 200 && py[playerNumber] > 100 && py[playerNumber] < 500){
@@ -155,6 +180,36 @@ function setScore(playerNumber){
 	}else if(py[playerNumber] >= 500){
 		score[playerNumber] +=20 - px[playerNumber]/20;
 	}
+}
+
+function constructor(testMoves, score, playerNumber){
+	setOfTests[playerNumber][testNumber] = testMoves[playerNumber];
+	setOfScores[playerNumber][testNumber] = score;
+	if(testNumber%9 == 0){
+		compileSetOfMoves(playerNumber);
+		testNumber = 0;	
+	}
+}
+function compileSetOfMoves(playerNumber){
+	let aux;
+	let setAux;
+	for(let x = 0; x < 11; x++){
+		for(let y = 0; y < 11; y++){
+			if(setOfScores[playerNumber][x] < setOfScores[playerNumber][y]){
+
+				aux = setOfScores[playerNumber][x];
+				setOfScores[playerNumber][x] = setOfScores[playerNumber][y];
+				setOfScores[playerNumber][y] = aux;
+
+				setAux = setOfTests[playerNumber][x];
+				setOfTests[playerNumber][x] = setOfTests[playerNumber][y];
+				setOfTests[playerNumber][y] = setAux;
+
+			}
+		}
+	}
+	setOfScores[playerNumber][10] = setOfScores[playerNumber][0];
+	setOfScores[playerNumber][9] = setOfScores[playerNumber][1];
 }
 </script>
 </body>
