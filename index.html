@@ -8,37 +8,32 @@
 	<button onclick="gameReset()">Reset</button>
 <canvas id="stage" width="600" height="600"></canvas>
 <script type="text/javascript">
-
 var time = 500, sqrtSize = 10, ctx, stage,numberOfPlayers = 1, colisorNumber;
-var px = [],py = [], alive = [], setOfColors = ["","red","blue","black","white","pink"], lastYPosition;
+var px = [],py = [], alive = [],score = [], setOfColors = ["","red","blue","black","white","pink"], lastYPosition;
 window.onload = function(){
 	stage = document.getElementById('stage');
 	ctx = stage.getContext("2d");
-
 	ctx.fillStyle = "grey";
 	ctx.fillRect(0,0, stage.width, stage.height);
 	newPlayer();
 	
 }
-
-setInterval(run,time);
-
+//setInterval(run,time);
 function run(){
 	
 	ctx.fillStyle = "grey";
     ctx.fillRect(0,0, stage.width, stage.height);
-
 	ctx.fillStyle = "yellow";
 	ctx.fillRect(100,100,400,400);
-
 	ctx.fillStyle = "green";
 	ctx.fillRect(0,480,100,20);
-
 	for(var x = 1; x < numberOfPlayers; x++){
-			randomMove(x);
+			//randomMove(x);
 			killPlayer(x);
+			if(alive[x]){
+				setScore(x);
+			}
 	}	
-
 	for(var x = 1; x <= numberOfPlayers; x++){
 		if(alive[x]){
 		ctx.fillStyle = setOfColors[x];
@@ -46,9 +41,9 @@ function run(){
 		}
 	}
 }
-
 function playerMovement(
 	movement, playerNumber) {
+		run();
 		lastYPosition = py[playerNumber];
 	switch(movement){
 		case "r":
@@ -65,7 +60,6 @@ function playerMovement(
 		break;
 	}
 }
-
 function newPlayer(){
 	if(numberOfPlayers > 5){
 		alert("The max number of player is 5.");
@@ -73,10 +67,10 @@ function newPlayer(){
 		px[numberOfPlayers] = (numberOfPlayers-1) * 20;
 		py[numberOfPlayers] = 460;
 		alive[numberOfPlayers] = true;
+		score[numberOfPlayers] = 0.0;
 		numberOfPlayers++;
 	}
 }
-
 function gameReset(){
 	let gameOn = false;
 	for(var i = 1; i < numberOfPlayers ; i++){
@@ -86,47 +80,42 @@ function gameReset(){
 		}
 	}
 	if(!gameOn){
-		console.log("r");
 		for(var x = 1; x < numberOfPlayers ; x++){
-			console.log("aa: ");
 			px[x] = (x-1) * 20;
 			py[x] = 460;
 			alive[x] = true;
+			score[x] = 0;
 		}
 	}
 }
-
 function killPlayer(playerNumber){
 	if(px[playerNumber] >= 100 && py[playerNumber] >= 100 && py[playerNumber] < 500 && px[playerNumber] < 500){
 		alive[playerNumber] = false;
+		score[playerNumber] -= 100;
 	}
-
 	if(inColision(playerNumber)){
 		alive[colisorNumber] = false;
 		alive[playerNumber] = false;
+		score[playerNumber] -= 100;
+		score[colisorNumber] -= 100;
 	}
-
 	if(foul(playerNumber)){
 		alive[playerNumber] = false;
+		score[playerNumber] -= 100;
 	}
-
-	if(px[playerNumber] < 0 || px[playerNumber] > 500 || py[playerNumber] < 0 || py[playerNumber] > 500){
+	if(px[playerNumber] < 0 || px[playerNumber] > 600 || py[playerNumber] < 0 || py[playerNumber] > 600){
 		alive[playerNumber] = false;
+		score[playerNumber] -= 100;
 	}
 }
-
 function foul(playerNumber){
-
 	if(lastYPosition == 460 && py[playerNumber] == 480 && px[playerNumber] < 200){
 		return true;
 	}else{
 		return false;
 	}
-
 }
-
 function inColision(playerNumber){
-
 	for(var x = 1; x <= numberOfPlayers; x++){
 		if(x != playerNumber){
 			if(px[x] == px[playerNumber] && py[x] == py[playerNumber]){
@@ -137,10 +126,8 @@ function inColision(playerNumber){
 	}
 	return false;
 }
-
 function randomMove(playerNumber){
 	let x = Math.floor((Math.random() * 4) + 1);
-
 	switch(x){
 		case 1:
 			playerMovement("r",playerNumber);
@@ -157,7 +144,18 @@ function randomMove(playerNumber){
 	}
 }
 
+function setScore(playerNumber){
+	
+	if(px[playerNumber] < 200 && py[playerNumber] > 100 && py[playerNumber] < 500){
+		score[playerNumber] += 23 -py[playerNumber]/20 ;
+	}else if(px[playerNumber] > 200 && py[playerNumber] > 100 && py[playerNumber] < 500){
+		score[playerNumber] += py[playerNumber]/20;
+	}else if(py[playerNumber] < 100){
+		score[playerNumber] += px[playerNumber]/20;
+	}else if(py[playerNumber] >= 500){
+		score[playerNumber] +=20 - px[playerNumber]/20;
+	}
+}
 </script>
 </body>
 </html>
-
