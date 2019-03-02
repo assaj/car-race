@@ -18,7 +18,7 @@ window.onload = function(){
 	newPlayer();
 	
 }
-//setInterval(run,time);
+setInterval(run,time);
 function run(){
 	
 	ctx.fillStyle = "grey";
@@ -28,7 +28,7 @@ function run(){
 	ctx.fillStyle = "green";
 	ctx.fillRect(0,480,100,20);
 	for(var x = 1; x < numberOfPlayers; x++){
-			//randomMove(x);
+			randomMove(x);
 			killPlayer(x);
 			if(alive[x]){
 				setScore(x);
@@ -43,7 +43,7 @@ function run(){
 }
 function playerMovement(
 	movement, playerNumber) {
-		run();
+
 		lastYPosition = py[playerNumber];
 	switch(movement){
 		case "r":
