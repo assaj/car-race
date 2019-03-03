@@ -8,7 +8,7 @@
 	<button onclick="gameReset()">Reset</button>
 <canvas id="stage" width="600" height="600"></canvas>
 <script type="text/javascript">
-var time = 200, sqrtSize = 10, ctx, stage,numberOfPlayers = 1, colisorNumber, setOfTests,  testNumber, testSize = 500, testMoves = [], testSave = [], testTime, setOfTests = [], setOfScores = [];
+var time = 10, sqrtSize = 10, ctx, stage,numberOfPlayers = 1, colisorNumber, setOfTests,  testNumber, testSize = 9999999, testMoves = [], testSave = [], testTime, setOfTests = [], setOfScores = [], realTestNumber;
 var px = [],py = [], alive = [],score = [], setOfColors = ["","red","blue","black","white","pink"], lastYPosition;
 window.onload = function(){
 	stage = document.getElementById('stage');
@@ -17,8 +17,8 @@ window.onload = function(){
 	ctx.fillRect(0,0, stage.width, stage.height);
 	newPlayer();
 	testNumber = 0;
+	realTestNumber = 0;
 	testTime = 0;
-	
 }
 setInterval(run,time);
 function run(){
@@ -55,13 +55,11 @@ function rightMove(playerNumber){
 	if(x == 1){
 		randomMove(playerNumber);
 	}else{
-		randomMove(playerNumber);
-		//console.log(setOfTests[playerNumber][testNumber%12][testTime%11]);
-		//if(setOfTests[playerNumber][testNumber%12][testTime%11] != 0){
-		//	playerNumber(setOfTests[playerNumber][testNumber%12][testTime%11],playerNumber)
-		//}else{
-		//	randomMove(playerNumber);
-		//}
+		if(realTestNumber == 0){
+			randomMove(playerNumber);
+		}else{
+			playerMovement(setOfTests[playerNumber][testNumber], playerNumber);
+		}
 	}
 }
 function playerMovement(
@@ -119,12 +117,17 @@ function gameReset(){
 			paintPlayer(x);		
 		}
 		testTime = 0;
-		testNumber++;
 	}
 }
 function clearMoves(playerNumber){
-	for(let i = 0; i < 200; i++){
+	for(let i = 0; i < 20; i++){
 		testMoves[playerNumber][i] = 0;
+	}
+}
+function clearTestAndScore(playerNumber, idx){
+	for(var x = 0; x < idx; x++){
+		setOfScores[playerNumber][10 - x] = setOfScores[playerNumber][x];
+		setOfTests[playerNumber][10 - x] = setOfTests[playerNumber][x];
 	}
 }
 function killPlayer(playerNumber){
@@ -183,19 +186,24 @@ function setScore(playerNumber){
 }
 
 function constructor(testMoves, score, playerNumber){
-	setOfTests[playerNumber][testNumber] = testMoves[playerNumber];
+	console.log(setOfTests[playerNumber]);
+	setOfTests[playerNumber][testNumber] = testMoves;
 	setOfScores[playerNumber][testNumber] = score;
-	if(testNumber%9 == 0){
+	if(testNumber%11 == 0){
 		compileSetOfMoves(playerNumber);
 		testNumber = 0;	
+	}else{
+		testNumber++;
+		realTestNumber = 1;
 	}
 }
 function compileSetOfMoves(playerNumber){
 	let aux;
 	let setAux;
-	for(let x = 0; x < 11; x++){
-		for(let y = 0; y < 11; y++){
-			if(setOfScores[playerNumber][x] < setOfScores[playerNumber][y]){
+	//console.log("before: "+setOfScores[playerNumber]);
+	for(let x = 1; x < 11; x++){
+		for(let y = 1; y < 11; y++){
+			if(setOfScores[playerNumber][x] > setOfScores[playerNumber][y]){
 
 				aux = setOfScores[playerNumber][x];
 				setOfScores[playerNumber][x] = setOfScores[playerNumber][y];
@@ -208,8 +216,9 @@ function compileSetOfMoves(playerNumber){
 			}
 		}
 	}
-	setOfScores[playerNumber][10] = setOfScores[playerNumber][0];
-	setOfScores[playerNumber][9] = setOfScores[playerNumber][1];
+
+	clearTestAndScore(playerNumber,5);
+	//console.log("after: "+setOfScores[playerNumber]);
 }
 </script>
 </body>
