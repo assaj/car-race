@@ -9,7 +9,7 @@
 <canvas id="stage" width="600" height="600"></canvas>
 <script type="text/javascript">
 var time = 10, sqrtSize = 10, ctx, stage,numberOfPlayers = 1, colisorNumber, setOfTests,  testNumber, testSize = 9999999, testMoves = [], testSave = [], testTime, setOfTests = [], setOfScores = [], realTestNumber;
-var px = [],py = [], alive = [],score = [], setOfColors = ["","red","blue","black","white","pink"], lastYPosition;
+var px = [],py = [], alive = [],score = [], setOfColors = ["","red","blue","black","white","pink"], lastYPosition = 460;
 window.onload = function(){
 	stage = document.getElementById('stage');
 	ctx = stage.getContext("2d");
@@ -29,36 +29,44 @@ function run(){
 	ctx.fillRect(100,100,400,400);
 	ctx.fillStyle = "green";
 	ctx.fillRect(0,480,100,20);
+
 	for(let x = 1; x < numberOfPlayers; x++){
 			if(alive[x]){
 				killPlayer(x);
 				if(alive[x]){
+					paintPlayer(x);
 					setScore(x);
 					rightMove(x);
 				}
 			}
 	}	
-	for(let x = 1; x <= numberOfPlayers; x++){
-		if(alive[x]){
-			paintPlayer(x);
-		}
-	}
 	gameReset();
-	testTime ++;
 }
 function paintPlayer(playerNumber){
 	ctx.fillStyle = setOfColors[playerNumber];
 	ctx.fillRect(px[playerNumber],py[playerNumber],20,20);//X,Y,WIDTH,HEIGHT
 }
 function rightMove(playerNumber){
-	let x = Math.floor((Math.random() * 10) + 1);
-	if(x == 1){
+	if(setOfTests[playerNumber][testNumber%11][testTime] == 0){
 		randomMove(playerNumber);
 	}else{
-		if(realTestNumber == 0){
+		playerMovement(setOfTests[playerNumber][testNumber%11][testTime],playerNumber);
+	}
+}
+function XrightMove(playerNumber){
+	let x = Math.floor((Math.random() * 10) + 1);
+	if(x == 1){
+		console.log("burro");
+		randomMove(playerNumber);
+	}else{
+		if(setOfTests[playerNumber][testNumber%11][testTime] == 0){
+			console.log("vazio");
 			randomMove(playerNumber);
 		}else{
-			playerMovement(setOfTests[playerNumber][testNumber], playerNumber);
+			console.log("inteligente: "+testTime);
+			console.log(setOfTests[playerNumber][testNumber%11]);
+			console.log(setOfScores[playerNumber][testNumber%11]);
+			playerMovement(setOfTests[playerNumber][testNumber%11][testTime],playerNumber);
 		}
 	}
 }
@@ -83,6 +91,7 @@ function playerMovement(
 }
 function saveMovement(playerNumber, movement){
 	testMoves[playerNumber][testTime]= movement;
+	testTime++;
 }
 function newPlayer(){
 	if(numberOfPlayers > 5){
@@ -95,6 +104,13 @@ function newPlayer(){
 		testMoves[numberOfPlayers] = [];
 		setOfTests[numberOfPlayers] = [];
 		setOfScores[numberOfPlayers] = [];
+		for(let x = 0; x < 20; x++){
+			setOfTests[numberOfPlayers][x] = [];
+			for(let y = 0; y < 200; y++){
+				setOfTests[numberOfPlayers][x][y] = 0;
+			}
+		}
+		clearMoves(numberOfPlayers);
 
 		numberOfPlayers++;
 	}
@@ -108,26 +124,30 @@ function gameReset(){
 	}
 	if(!gameOn || testTime > testSize){
 		for(let x = 1; x < numberOfPlayers ; x++){
+			//console.log(testMoves[x]+" Score: "+score[x]);
 			constructor(testMoves[x],score[x],x);
 			px[x] = (x-1) * 20;
 			py[x] = 460;
 			alive[x] = true;
 			score[x] = 0;
 			clearMoves(x);
-			paintPlayer(x);		
+			//paintPlayer(x);		
 		}
 		testTime = 0;
+		testNumber++;
 	}
 }
 function clearMoves(playerNumber){
-	for(let i = 0; i < 20; i++){
+	for(let i = 0; i < 2000; i++){
 		testMoves[playerNumber][i] = 0;
 	}
 }
 function clearTestAndScore(playerNumber, idx){
 	for(var x = 0; x < idx; x++){
-		setOfScores[playerNumber][10 - x] = setOfScores[playerNumber][x];
-		setOfTests[playerNumber][10 - x] = setOfTests[playerNumber][x];
+		setOfScores[playerNumber][10 - x] = 0;
+		for (var i = 0; i < 2000; i++) {
+			setOfTests[playerNumber][10 - x][i] = 0;
+		}
 	}
 }
 function killPlayer(playerNumber){
@@ -169,8 +189,7 @@ function inColision(playerNumber){
 	return false;
 }
 function randomMove(playerNumber){
-	let x = Math.floor((Math.random() * 4) + 1);
-	playerMovement(x,playerNumber)
+	playerMovement(Math.floor((Math.random() * 4) + 1),playerNumber)
 }
 
 function setScore(playerNumber){
@@ -186,39 +205,55 @@ function setScore(playerNumber){
 }
 
 function constructor(testMoves, score, playerNumber){
-	console.log(setOfTests[playerNumber]);
-	setOfTests[playerNumber][testNumber] = testMoves;
-	setOfScores[playerNumber][testNumber] = score;
-	if(testNumber%11 == 0){
-		compileSetOfMoves(playerNumber);
-		testNumber = 0;	
+
+	//TestMoves OK and score OK
+	for (var i = 0; i < testMoves.length; i++) {
+		setOfTests[playerNumber][testNumber%11][i] = testMoves[i];
+	}
+	setOfScores[playerNumber][testNumber%11] = score;
+	
+	//console.log(setOfTests[playerNumber][testNumber%11]+"  Associado a : "+setOfScores[playerNumber][testNumber%11]+" de numero: "+testNumber%11);  
+	
+
+	if(testNumber%10 == 0){
+		//compileSetOfMoves(playerNumber);
+		//console.log("COMPILANDO========================================");
+		compiler(playerNumber);
+		//	console.log("  Associado a : "+setOfScores[playerNumber][i]);
+		
+		//console.log("END========================================");
+		//testNumber = 0;	
 	}else{
-		testNumber++;
 		realTestNumber = 1;
 	}
+	realTestNumber = 1;
 }
-function compileSetOfMoves(playerNumber){
+function compiler(playerNumber){
 	let aux;
-	let setAux;
-	//console.log("before: "+setOfScores[playerNumber]);
-	for(let x = 1; x < 11; x++){
-		for(let y = 1; y < 11; y++){
+	let setAux = [];
+
+	for(let x = 0; x < 11; x++){
+		for(let y = 0; y < 11; y++){
 			if(setOfScores[playerNumber][x] > setOfScores[playerNumber][y]){
 
 				aux = setOfScores[playerNumber][x];
 				setOfScores[playerNumber][x] = setOfScores[playerNumber][y];
 				setOfScores[playerNumber][y] = aux;
 
-				setAux = setOfTests[playerNumber][x];
-				setOfTests[playerNumber][x] = setOfTests[playerNumber][y];
-				setOfTests[playerNumber][y] = setAux;
-
+				for (var i = 0; i < setOfTests[playerNumber][x].length; i++) {
+					setAux[i] = setOfTests[playerNumber][x][i];
+				}
+				for (var i = 0; i < setOfTests[playerNumber][y].length; i++) {
+					setOfTests[playerNumber][x][i] = setOfTests[playerNumber][y][i];
+				}
+				for (var i = 0; i < setAux.length; i++) {
+					setOfTests[playerNumber][y][i] = setAux[i];
+				}
 			}
 		}
 	}
 
 	clearTestAndScore(playerNumber,5);
-	//console.log("after: "+setOfScores[playerNumber]);
 }
 </script>
 </body>
