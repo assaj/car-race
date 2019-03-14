@@ -7,9 +7,9 @@
 	<button onclick="newPlayer()">Create a new player</button>
 	<button onclick="gameReset()">Reset</button>
 <canvas id="stage" width="600" height="600"></canvas>
-<script type="text/javascript">
-var time = 10, sqrtSize = 10, ctx, stage,numberOfPlayers = 1, colisorNumber, setOfTests,  testNumber, testSize = 9999999, testMoves = [], testSave = [], testTime, setOfTests = [], setOfScores = [], realTestNumber;
-var px = [],py = [], alive = [],score = [], setOfColors = ["","red","blue","black","white","pink"], lastYPosition = 460;
+<script type="text/javascript" >
+	var time = 10, sqrtSize = 10, ctx, stage,numberOfPlayers = 1, colisorNumber, setOfTests,  testNumber, testSize = 9999999, testMoves = [], testSave = [], testTime, setOfTests = [], setOfScores = [], realTestNumber;
+var px = [],py = [], alive = [],score = [], setOfColors = ["","red","blue","black","white","pink"], lastYPosition = [], lastXPosition = [];
 window.onload = function(){
 	stage = document.getElementById('stage');
 	ctx = stage.getContext("2d");
@@ -47,10 +47,12 @@ function paintPlayer(playerNumber){
 	ctx.fillRect(px[playerNumber],py[playerNumber],20,20);//X,Y,WIDTH,HEIGHT
 }
 function rightMove(playerNumber){
-	if(setOfTests[playerNumber][testNumber%11][testTime] == 0){
-		randomMove(playerNumber);
-	}else{
-		playerMovement(setOfTests[playerNumber][testNumber%11][testTime],playerNumber);
+	if(Math.floor((Math.random() * 10) + 1) == 1){
+		if(setOfTests[playerNumber][testNumber%11][testTime] == 0){
+			randomMove(playerNumber);
+		}else{
+			playerMovement(setOfTests[playerNumber][testNumber%11][testTime],playerNumber);
+		}
 	}
 }
 function XrightMove(playerNumber){
@@ -70,10 +72,10 @@ function XrightMove(playerNumber){
 		}
 	}
 }
-function playerMovement(
-	movement, playerNumber) {
+function playerMovement(movement, playerNumber) {
 		saveMovement(playerNumber, movement);
-		lastYPosition = py[playerNumber];
+		lastYPosition[playerNumber] = py[playerNumber];
+		lastXPosition[playerNumber] = px[playerNumber];
 	switch(movement){
 		case 1://right
 			px[playerNumber]+=20;
@@ -104,6 +106,8 @@ function newPlayer(){
 		testMoves[numberOfPlayers] = [];
 		setOfTests[numberOfPlayers] = [];
 		setOfScores[numberOfPlayers] = [];
+		lastYPosition[numberOfPlayers] = 460;
+		lastXPosition[numberOfPlayers] = numberOfPlayers * 20 ;
 		for(let x = 0; x < 20; x++){
 			setOfTests[numberOfPlayers][x] = [];
 			for(let y = 0; y < 200; y++){
@@ -131,7 +135,7 @@ function gameReset(){
 			alive[x] = true;
 			score[x] = 0;
 			clearMoves(x);
-			//paintPlayer(x);		
+			paintPlayer(x);		
 		}
 		testTime = 0;
 		testNumber++;
@@ -148,30 +152,33 @@ function clearTestAndScore(playerNumber, idx){
 		for (var i = 0; i < 2000; i++) {
 			setOfTests[playerNumber][10 - x][i] = 0;
 		}
+		for (var i = 0; i < setOfTests[playerNumber][x].length; i++) {
+			if(setOfTests[playerNumber][x][i] == 0){
+			//	setOfTests[playerNumber][x][i-1] = 0;
+				break;
+			}else{
+				setOfTests[playerNumber][10 - x][i] = setOfTests[playerNumber][x][i];
+			}
+		}
 	}
 }
 function killPlayer(playerNumber){
 	if(px[playerNumber] >= 100 && py[playerNumber] >= 100 && py[playerNumber] < 500 && px[playerNumber] < 500){
 		alive[playerNumber] = false;
-		score[playerNumber] -= 100;
 	}
 	if(inColision(playerNumber)){
 		alive[colisorNumber] = false;
 		alive[playerNumber] = false;
-		score[playerNumber] -= 100;
-		score[colisorNumber] -= 100;
 	}
 	if(foul(playerNumber)){
 		alive[playerNumber] = false;
-		score[playerNumber] -= 100;
 	}
 	if(px[playerNumber] < 0 || px[playerNumber] > 600 || py[playerNumber] < 0 || py[playerNumber] > 600){
 		alive[playerNumber] = false;
-		score[playerNumber] -= 100;
 	}
 }
 function foul(playerNumber){
-	if(lastYPosition == 460 && py[playerNumber] == 480 && px[playerNumber] < 200){
+	if(lastYPosition[playerNumber] == 460 && py[playerNumber] == 480 && px[playerNumber] < 200){
 		return true;
 	}else{
 		return false;
@@ -193,14 +200,66 @@ function randomMove(playerNumber){
 }
 
 function setScore(playerNumber){
-	if(px[playerNumber] < 200 && py[playerNumber] > 100 && py[playerNumber] < 500){
-		score[playerNumber] += 23 -py[playerNumber]/20 ;
-	}else if(px[playerNumber] > 200 && py[playerNumber] > 100 && py[playerNumber] < 500){
-		score[playerNumber] += py[playerNumber]/20;
-	}else if(py[playerNumber] < 100){
-		score[playerNumber] += px[playerNumber]/20;
-	}else if(py[playerNumber] >= 500){
-		score[playerNumber] +=20 - px[playerNumber]/20;
+
+	switch(section(playerNumber)){
+		case 1:
+			if(lastYPosition[playerNumber] > py[playerNumber]){
+				score[playerNumber] += ((py[playerNumber] - 460) / 20) * -1; 
+			}else if(lastYPosition[playerNumber] < py[playerNumber]){
+				score[playerNumber] -=((lastYPosition[playerNumber] - 460) / 20) * -1;
+			}else{
+				//score[playerNumber] -= 1;
+			}
+			lastYPosition[playerNumber] = py[playerNumber];
+		break;
+		case 2:
+			if(lastXPosition[playerNumber] < px[playerNumber]){
+				score[playerNumber] += (lastXPosition[playerNumber]/20) + 15;
+			}else if(lastXPosition[playerNumber] > px[playerNumber]){
+				score[playerNumber] -= (lastXPosition[playerNumber]/20) + 15;
+			}else{
+				//score[playerNumber] -= 1;
+			}
+			lastXPosition[playerNumber] = px[playerNumber];
+		break;
+		case 3:
+			if(lastYPosition[playerNumber] < py[playerNumber]){
+				score[playerNumber] += (((py[playerNumber] - 460) / 20) * -1) +30; 
+			}else if(lastYPosition[playerNumber] > py[playerNumber]){
+				score[playerNumber] -=(((lastYPosition[playerNumber] - 460) / 20) * -1) +30;
+			}else{
+				//score[playerNumber] -= 1;
+			}
+			lastYPosition[playerNumber] = py[playerNumber];			
+		break;
+		case 4:
+			if(lastXPosition[playerNumber] > px[playerNumber]){
+				score[playerNumber] += (lastXPosition[playerNumber]/20) + 45;
+			}else if(lastXPosition[playerNumber] < px[playerNumber]){
+				score[playerNumber] -= (lastXPosition[playerNumber]/20) + 45;
+			}else{
+				//score[playerNumber] -= 1;
+			}
+			lastXPosition[playerNumber] = px[playerNumber];			
+		break;
+	}
+}
+function section(playerNumber){
+
+	if(py[playerNumber] <= 480 && py[playerNumber] >=100){
+		//1 or 3
+		if(px[playerNumber] < 100){
+			return 1;
+		}else{
+			return 3;
+		}
+	}else{
+		// 2 or 4
+		if(py[playerNumber] < 100){
+			return 2;
+		}else{
+			return 4;
+		}
 	}
 }
 
@@ -257,4 +316,10 @@ function compiler(playerNumber){
 }
 </script>
 </body>
+<footer>
+	<button onclick="playerMovement(2,1)">LEFT</button>
+	<button onclick="playerMovement(1,1)">RIGHT</button>
+	<button onclick="playerMovement(3,1)">UP</button>
+	<button onclick="playerMovement(4,1)">DOWN</button>
+</footer>
 </html>
