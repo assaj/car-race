@@ -25,9 +25,8 @@ function run(){
                 //if(colisionStatus)
                   //  colision(x); FIX IT 
 				if(playerSet[x].alive){
-					paintPlayer(x);
-					setScore(x);
-					rightMove(x);
+                    paintPlayer(x);
+                    geneticLearningExecution(x);
 				}
 			}
 	}	
@@ -47,14 +46,6 @@ function newPlayer(){
         playerSet[numberOfPlayers].px = (numberOfPlayers) * 20;
         playerSet[numberOfPlayers].py = 460;
         startGeneticLearning(numberOfPlayers);
-		for(let x = 0; x < 20; x++){
-			setOfTests[numberOfPlayers][x] = [];
-			for(let y = 0; y < 200; y++){
-				setOfTests[numberOfPlayers][x][y] = 0;
-			}
-		}
-        clearMoves(numberOfPlayers);
-        
 		numberOfPlayers++;
 	}
 }
@@ -73,7 +64,7 @@ function gameReset(){
 			playerSet[x].py = 460;
 			playerSet[x].alive = true;
 			playerSet[x].score = 0;
-			clearMoves(x);
+			resetGeneticLearning(x);
 			paintPlayer(x);		
 		}
 		testTime = 0;

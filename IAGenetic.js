@@ -1,9 +1,25 @@
 var time = 100, sqrtSize = 10, ctx, stage,numberOfPlayers = 1, testMoves = [], testSave = [], setOfTests = [], setOfScores = [];
 
+function startGeneticLearningExecution(playerNumber){
+    setScore(playerNumber);
+	rightMove(playerNumber);
+}
+function resetGeneticLearning(playerNumber){
+    clearMoves(playerNumber);
+}
 function startGeneticLearning(playerNumber){
     testMoves[playerNumber] = []; 
     setOfTests[playerNumber] = [];
     setOfScores[playerNumber] = [];
+
+    for(let x = 0; x < 20; x++){
+        setOfTests[numberOfPlayers][x] = [];
+        for(let y = 0; y < 200; y++){
+            setOfTests[numberOfPlayers][x][y] = 0;
+        }
+    }
+    clearMoves(numberOfPlayers);
+    
 }
 
 function rightMove(playerNumber){
