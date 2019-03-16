@@ -1,7 +1,6 @@
-var time = 10, sqrtSize = 10, ctx, stage,numberOfPlayers = 1, colisorNumber, setOfTests,  testNumber = 0, testSize = 9999999, testMoves = [], testSave = [], testTime = 0, setOfTests = [], setOfScores = [], realTestNumber, setOfColors = ["","red","blue","black","white","pink"];
-
-//var time = 10, ctx, stage, sqrtSize = 10, numberOfPlayers = 1, colisorNumber, testNumber = 0, testSize = 9999, setOfColors = ["","red","blue","black","white","pink"], realTestNumber;
+var time = 10, ctx, stage, sqrtSize = 10, numberOfPlayers = 0, colisorNumber, testNumber = 0, testSize = 9999, setOfColors = ["red","blue","black","white","pink"], realTestNumber;
 var playerSet = [];
+
 window.onload = function(){
 	stage = document.getElementById('stage');
 	ctx = stage.getContext("2d");
@@ -20,10 +19,11 @@ function run(){
 	ctx.fillStyle = "green";
 	ctx.fillRect(0,480,100,20);
 
-	for(let x = 1; x < numberOfPlayers; x++){
+	for(let x = 0; x < numberOfPlayers; x++){
 			if(playerSet[x].alive){
                 playerSet[x].tryKill();
-               // colision(x); FIX IT 
+                //if(colisionStatus)
+                  //  colision(x); FIX IT 
 				if(playerSet[x].alive){
 					paintPlayer(x);
 					setScore(x);
@@ -37,32 +37,16 @@ function paintPlayer(playerNumber){
 	ctx.fillStyle = setOfColors[playerNumber];
 	ctx.fillRect(playerSet[playerNumber].px,playerSet[playerNumber].py,20,20);//X,Y,WIDTH,HEIGHT
 }
-function rightMove(playerNumber){
-	if(Math.floor((Math.random() * 10) + 1) == 1 || setOfTests[playerNumber][testNumber%11][testTime] == 0){
-            let random = Math.floor((Math.random() * 4) + 1);
-            playerSet[playerNumber].movement(random);
-            saveMovement(playerNumber,random);
-	}else{
-        playerSet[playerNumber].movement(setOfTests[playerNumber][testNumber%11][testTime]);
-        saveMovement(playerNumber,setOfTests[playerNumber][testNumber%11][testTime]);
-    }
-}
 
-function saveMovement(playerNumber, movement){
-	testMoves[playerNumber][testTime]= movement;
-	testTime++;
-}
 function newPlayer(){
-	if(numberOfPlayers > 5){
+	if(numberOfPlayers > 4){
 		alert("The max number of player is 5.");
 	}else{
         playerSet[numberOfPlayers] = player;
         playerSet[numberOfPlayers].color = setOfColors[numberOfPlayers];
-        playerSet[numberOfPlayers].px = (numberOfPlayers-1) * 20;
+        playerSet[numberOfPlayers].px = (numberOfPlayers) * 20;
         playerSet[numberOfPlayers].py = 460;
-		testMoves[numberOfPlayers] = []; // FIX IT
-		setOfTests[numberOfPlayers] = [];
-		setOfScores[numberOfPlayers] = [];
+        startGeneticLearning(numberOfPlayers);
 		for(let x = 0; x < 20; x++){
 			setOfTests[numberOfPlayers][x] = [];
 			for(let y = 0; y < 200; y++){
@@ -76,16 +60,16 @@ function newPlayer(){
 }
 function gameReset(){
 	let gameOn = false;
-	for(let i = 1; i < numberOfPlayers ; i++){
+	for(let i = 0; i < numberOfPlayers ; i++){
 		if(playerSet[i].alive){
 		 	gameOn = true;
 		}
 	}
-	if(!gameOn || testTime > testSize){
-		for(let x = 1; x < numberOfPlayers ; x++){
+	if(!gameOn){
+		for(let x = 0; x < numberOfPlayers ; x++){
 			//console.log(testMoves[x]+" Score: "+score[x]);
 			constructor(testMoves[x],playerSet[x].score,x);
-			playerSet[x].px = (x-1) * 20;
+			playerSet[x].px = x * 20;
 			playerSet[x].py = 460;
 			playerSet[x].alive = true;
 			playerSet[x].score = 0;
@@ -96,29 +80,9 @@ function gameReset(){
 		testNumber++;
 	}
 }
-function clearMoves(playerNumber){
-	for(let i = 0; i < 2000; i++){
-		testMoves[playerNumber][i] = 0;
-	}
-}
-function clearTestAndScore(playerNumber, idx){
-	for(var x = 0; x < idx; x++){
-		setOfScores[playerNumber][10 - x] = 0;
-		for (var i = 0; i < 2000; i++) {
-			setOfTests[playerNumber][10 - x][i] = 0;
-		}
-		for (var i = 0; i < setOfTests[playerNumber][x].length; i++) {
-			if(setOfTests[playerNumber][x][i] == 0){
-			//	setOfTests[playerNumber][x][i-1] = 0;
-				break;
-			}else{
-				setOfTests[playerNumber][10 - x][i] = setOfTests[playerNumber][x][i];
-			}
-		}
-	}
-}
+
 function colision(playerNumber){
-	for(let x = 1; x <= numberOfPlayers; x++){
+	for(let x = 0; x < numberOfPlayers; x++){
 		if(x != playerNumber){
 			if(playerSet[playerNumber].px == playerSet[x].px && playerSet[playerNumber].py == playerSet[x].py){
                 colisorNumber = x;
@@ -193,54 +157,6 @@ function section(playerNumber){
 	}
 }
 
-function constructor(testMoves, score, playerNumber){
-
-	//TestMoves OK and score OK
-	for (var i = 0; i < testMoves.length; i++) {
-		setOfTests[playerNumber][testNumber%11][i] = testMoves[i];
-	}
-	setOfScores[playerNumber][testNumber%11] = score;
-	
-	//console.log(setOfTests[playerNumber][testNumber%11]+"  Associado a : "+setOfScores[playerNumber][testNumber%11]+" de numero: "+testNumber%11);  
-	
-
-	if(testNumber%10 == 0){
-		//compileSetOfMoves(playerNumber);
-		//console.log("COMPILANDO========================================");
-		compiler(playerNumber);
-		//	console.log("  Associado a : "+setOfScores[playerNumber][i]);
-		
-		//console.log("END========================================");
-		//testNumber = 0;	
-	}else{
-		realTestNumber = 1;
-	}
-	realTestNumber = 1;
-}
-function compiler(playerNumber){
-	let aux;
-	let setAux = [];
-
-	for(let x = 0; x < 11; x++){
-		for(let y = 0; y < 11; y++){
-			if(setOfScores[playerNumber][x] > setOfScores[playerNumber][y]){
-
-				aux = setOfScores[playerNumber][x];
-				setOfScores[playerNumber][x] = setOfScores[playerNumber][y];
-				setOfScores[playerNumber][y] = aux;
-
-				for (var i = 0; i < setOfTests[playerNumber][x].length; i++) {
-					setAux[i] = setOfTests[playerNumber][x][i];
-				}
-				for (var i = 0; i < setOfTests[playerNumber][y].length; i++) {
-					setOfTests[playerNumber][x][i] = setOfTests[playerNumber][y][i];
-				}
-				for (var i = 0; i < setAux.length; i++) {
-					setOfTests[playerNumber][y][i] = setAux[i];
-				}
-			}
-		}
-	}
-
-	clearTestAndScore(playerNumber,5);
+function changeColisionStatus(){
+    colisionStatus ? colisionStatus = false : colisionStatus = true;
 }
