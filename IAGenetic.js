@@ -44,7 +44,7 @@ function clearMoves(playerNumber){
 	}
 }
 
-function clearTestAndScore(playerNumber, idx){ // Maybe Fix
+function clearTestAndScore(playerNumber, idx){
 	for(var x = 0; x < idx; x++){
 		setOfScores[playerNumber][10 - x] = 0;
 		for (var i = 0; i < 2000; i++) {
@@ -63,23 +63,12 @@ function clearTestAndScore(playerNumber, idx){ // Maybe Fix
 
 function constructor(testMoves, score, playerNumber){
 
-	//TestMoves OK and score OK
 	for (var i = 0; i < testMoves.length; i++) {
 		setOfTests[playerNumber][testNumber%11][i] = testMoves[i];
 	}
 	setOfScores[playerNumber][testNumber%11] = score;
-	
-	//console.log(setOfTests[playerNumber][testNumber%11]+"  Associado a : "+setOfScores[playerNumber][testNumber%11]+" de numero: "+testNumber%11);  
-	
-
 	if(testNumber%10 == 0){
-		//compileSetOfMoves(playerNumber);
-		//console.log("COMPILANDO========================================");
 		compiler(playerNumber);
-		//	console.log("  Associado a : "+setOfScores[playerNumber][i]);
-		
-		//console.log("END========================================");
-		//testNumber = 0;	
 	}else{
 		realTestNumber = 1;
 	}

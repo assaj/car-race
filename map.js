@@ -59,7 +59,6 @@ function gameReset(){
 	}
 	if(!gameOn){
 		for(let x = 0; x < numberOfPlayers ; x++){
-			//console.log(testMoves[x]+" Score: "+score[x]);
 			constructor(testMoves[x],playerSet[x].score,x);
 			playerSet[x].px = x * 20;
 			playerSet[x].py = 460;
@@ -94,7 +93,7 @@ function setScore(playerNumber){
 			}else if(playerSet[playerNumber].lastYPosition < playerSet[playerNumber].py){
 				playerSet[playerNumber].score -=((playerSet[playerNumber].lastYPosition - 460) / 20) * -1;
 			}else{
-				//score[playerNumber] -= 1;
+				//playerSet[playerNumber].score -= 1;
 			}
 			playerSet[playerNumber].lastYPosition = playerSet[playerNumber].py;
 		break;
@@ -104,7 +103,7 @@ function setScore(playerNumber){
 			}else if(playerSet[playerNumber].lastXPosition > playerSet[playerNumber].px){
 				playerSet[playerNumber].score -= (playerSet[playerNumber].lastXPosition/20) + 15;
 			}else{
-				//score[playerNumber] -= 1;
+				//playerSet[playerNumber].score -= 1;
 			}
 			playerSet[playerNumber].lastXPosition = playerSet[playerNumber].px;
 		break;
