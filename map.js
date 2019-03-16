@@ -1,4 +1,4 @@
-var time = 10, ctx, stage, sqrtSize = 10, numberOfPlayers = 0, colisorNumber, testNumber = 0, testSize = 9999, setOfColors = ["red","blue","black","white","pink"], realTestNumber;
+var time = 1000, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","white","pink"];
 var playerSet = [];
 
 window.onload = function(){
@@ -22,11 +22,12 @@ function run(){
 	for(let x = 0; x < numberOfPlayers; x++){
 			if(playerSet[x].alive){
                 playerSet[x].tryKill();
-                //if(colisionStatus)
-                  //  colision(x); FIX IT 
+                //if(colisionStatus){
+                  //  colision(x); FIX IT
+                //} 
 				if(playerSet[x].alive){
                     paintPlayer(x);
-                    geneticLearningExecution(x);
+                    GeneticLearningExecution(x);
 				}
 			}
 	}	

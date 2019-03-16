@@ -1,6 +1,6 @@
-var time = 100, sqrtSize = 10, ctx, stage,numberOfPlayers = 1, testMoves = [], testSave = [], setOfTests = [], setOfScores = [];
+var time = 100, ctx, stage,numberOfPlayers = 1, testMoves = [], testSave = [], setOfTests = [], setOfScores = [];
 
-function startGeneticLearningExecution(playerNumber){
+function GeneticLearningExecution(playerNumber){
     setScore(playerNumber);
 	rightMove(playerNumber);
 }
