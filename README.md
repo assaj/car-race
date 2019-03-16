@@ -1,2 +1,2 @@
-# others projects by Assaj in [cin.ufpe.br/~assaj](cin.ufpe.br/~assaj)
+# others projects by Assaj in [www.cin.ufpe.br/~assaj](cin.ufpe.br/~assaj)
 
