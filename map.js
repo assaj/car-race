@@ -31,7 +31,7 @@ function run(){
 				}
 			}
 	}	
-	gameReset();
+	tryReset();
 }
 function paintPlayer(playerNumber){
 	ctx.fillStyle = setOfColors[playerNumber];
@@ -51,6 +51,19 @@ function newPlayer(){
 	}
 }
 function gameReset(){
+	for(let x = 0; x < numberOfPlayers ; x++){
+		constructor(testMoves[x],playerSet[x].score,x);
+		playerSet[x].px = x * 20;
+		playerSet[x].py = 460;
+		playerSet[x].alive = true;
+		playerSet[x].score = 0;
+		resetGeneticLearning(x);
+		paintPlayer(x);		
+	}
+	testTime = 0;
+	testNumber++;
+}
+function tryReset(){
 	let gameOn = false;
 	for(let i = 0; i < numberOfPlayers ; i++){
 		if(playerSet[i].alive){
@@ -58,17 +71,7 @@ function gameReset(){
 		}
 	}
 	if(!gameOn){
-		for(let x = 0; x < numberOfPlayers ; x++){
-			constructor(testMoves[x],playerSet[x].score,x);
-			playerSet[x].px = x * 20;
-			playerSet[x].py = 460;
-			playerSet[x].alive = true;
-			playerSet[x].score = 0;
-			resetGeneticLearning(x);
-			paintPlayer(x);		
-		}
-		testTime = 0;
-		testNumber++;
+		gameReset();
 	}
 }
 
