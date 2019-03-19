@@ -1,8 +1,10 @@
 var time = 100, ctx, stage,numberOfPlayers = 1, testMoves = [], testSave = [], setOfTests = [], setOfScores = [];
 
 function GeneticLearningExecution(playerNumber){
-    setScore(playerNumber);
-	rightMove(playerNumber);
+	setScore(playerNumber);
+	if(!manualMode){
+		rightMove(playerNumber);
+	}
 }
 function resetGeneticLearning(playerNumber){
     clearMoves(playerNumber);

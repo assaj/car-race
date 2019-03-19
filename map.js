@@ -1,4 +1,4 @@
-var time = 1000, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","white","pink"];
+var time = 100, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","white","pink"];
 var playerSet = [];
 
 window.onload = function(){
@@ -150,4 +150,12 @@ function section(playerNumber){
 
 function changeColisionStatus(){
     colisionStatus ? colisionStatus = false : colisionStatus = true;
+}
+
+function ManualMode(){
+	manualMode ? manualMode = false : manualMode = true;
+}
+
+function playerMovement(command, playerNumber){
+	playerSet[playerNumber].movement(command);
 }
