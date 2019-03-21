@@ -1,4 +1,4 @@
-var time = 100, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","white","pink"];
+var time = 100, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","white","pink"], colisionStatus = false;
 var playerSet = [];
 
 window.onload = function(){
@@ -21,18 +21,44 @@ function run(){
 
 	for(let x = 0; x < numberOfPlayers; x++){
 			if(playerSet[x].alive){
-                playerSet[x].tryKill();
-                //if(colisionStatus){
-                  //  colision(x); FIX IT
-                //} 
-				if(playerSet[x].alive){
-                    paintPlayer(x);
-                    GeneticLearningExecution(x);
+				playerSet[x].tryKill();
+				if(colisionStatus){
+					colision()
 				}
 			}
 	}	
+	if(colisionStatus){
+		colision();
+	}
+	executePlayers();
 	tryReset();
 }
+
+function colision(){
+	for(let x = 0; x < numberOfPlayers; x++){
+		if(playerSet[x].alive){
+			for(let y = 0; y < numberOfPlayers; y++){
+				if(x != y && playerSet[y].alive){
+					if(playerSet[x].px == playerSet[y].px && playerSet[x].py == playerSet[y].py){
+						playerSet[x].alive = false;
+						playerSet[y].alive = false;
+						console.log("a");
+					}
+				}
+			}
+		}
+	}
+}
+
+function executePlayers(){
+	for(let x = 0; x < numberOfPlayers; x++){
+		if(playerSet[x].alive){
+			paintPlayer(x);
+			GeneticLearningExecution(x);
+		}
+	}	
+}
+
 function paintPlayer(playerNumber){
 	ctx.fillStyle = playerSet[playerNumber].color;
 	ctx.fillRect(playerSet[playerNumber].px,playerSet[playerNumber].py,20,20);//X,Y,WIDTH,HEIGHT
@@ -70,18 +96,6 @@ function tryReset(){
 	}
 	if(!gameOn){
 		gameReset();
-	}
-}
-
-function colision(playerNumber){
-	for(let x = 0; x < numberOfPlayers; x++){
-		if(x != playerNumber){
-			if(playerSet[playerNumber].px == playerSet[x].px && playerSet[playerNumber].py == playerSet[x].py){
-                colisorNumber = x;
-                playerSet[playerNumber].alive = false;
-				playerSet[x].alive = false;
-			}
-		}
 	}
 }
 
