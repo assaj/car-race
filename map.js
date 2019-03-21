@@ -1,4 +1,4 @@
-var time = 100, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","white","pink"], colisionStatus = false;
+var time = 100, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","white","pink"], colisionStatus = false, visualMode = true;
 var playerSet = [];
 
 window.onload = function(){
@@ -11,14 +11,14 @@ window.onload = function(){
 setInterval(run,time);
 
 function run(){
-
-	ctx.fillStyle = "grey";
-    ctx.fillRect(0,0, stage.width, stage.height);
-	ctx.fillStyle = "yellow";
-	ctx.fillRect(100,100,400,400);
-	ctx.fillStyle = "green";
-	ctx.fillRect(0,480,100,20);
-
+	if(visualMode){
+		ctx.fillStyle = "grey";
+		ctx.fillRect(0,0, stage.width, stage.height);
+		ctx.fillStyle = "yellow";
+		ctx.fillRect(100,100,400,400);
+		ctx.fillStyle = "green";
+		ctx.fillRect(0,480,100,20);
+	}
 	for(let x = 0; x < numberOfPlayers; x++){
 			if(playerSet[x].alive){
 				playerSet[x].tryKill();
@@ -59,8 +59,10 @@ function executePlayers(){
 }
 
 function paintPlayer(playerNumber){
-	ctx.fillStyle = playerSet[playerNumber].color;
-	ctx.fillRect(playerSet[playerNumber].px,playerSet[playerNumber].py,20,20);//X,Y,WIDTH,HEIGHT
+	if(visualMode){	
+		ctx.fillStyle = playerSet[playerNumber].color;
+		ctx.fillRect(playerSet[playerNumber].px,playerSet[playerNumber].py,20,20);//X,Y,WIDTH,HEIGHT
+	}
 }
 
 function newPlayer(){
@@ -164,6 +166,10 @@ function section(playerNumber){
 
 function changeColisionStatus(){
     colisionStatus ? colisionStatus = false : colisionStatus = true;
+}
+
+function changeVisualMode(){
+    visualMode ? visualMode = false : visualMode = true;
 }
 
 function ManualMode(){
