@@ -42,7 +42,6 @@ function colision(){
 					if(playerSet[x].px == playerSet[y].px && playerSet[x].py == playerSet[y].py){
 						playerSet[x].alive = false;
 						playerSet[y].alive = false;
-						console.log("a");
 					}
 				}
 			}
