@@ -6,9 +6,8 @@ window.onload = function(){
 	ctx = stage.getContext("2d");
 	ctx.fillStyle = "grey";
 	ctx.fillRect(0,0, stage.width, stage.height);
+	changeTime();
 }
-
-setInterval(run,time);
 
 function run(){
 	if(visualMode){
@@ -178,4 +177,9 @@ function ManualMode(){
 
 function playerMovement(command, playerNumber){
 	playerSet[playerNumber].movement(command);
+}
+
+function changeTime(){
+	let a = document.getElementById("myRange").value;
+	setInterval(run, 100 - a);
 }
