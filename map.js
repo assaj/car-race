@@ -34,18 +34,16 @@ function run(){
 	tryReset();
 }
 function paintPlayer(playerNumber){
-	ctx.fillStyle = setOfColors[playerNumber];
+	ctx.fillStyle = playerSet[playerNumber].color;
 	ctx.fillRect(playerSet[playerNumber].px,playerSet[playerNumber].py,20,20);//X,Y,WIDTH,HEIGHT
 }
 
 function newPlayer(){
+	
 	if(numberOfPlayers > 4){
 		alert("The max number of player is 5.");
-	}else{
-        playerSet[numberOfPlayers] = player;
-        playerSet[numberOfPlayers].color = setOfColors[numberOfPlayers];
-        playerSet[numberOfPlayers].px = (numberOfPlayers) * 20;
-        playerSet[numberOfPlayers].py = 460;
+	}else{ 
+		playerSet[numberOfPlayers] = new Player(setOfColors[numberOfPlayers], (numberOfPlayers) * 20, 460);
         startGeneticLearning(numberOfPlayers);
 		numberOfPlayers++;
 	}

@@ -16,12 +16,11 @@ function startGeneticLearning(playerNumber){
 
     for(let x = 0; x < 20; x++){
         setOfTests[numberOfPlayers][x] = [];
-        for(let y = 0; y < 200; y++){
+        for(let y = 0; y < 200; y++){ // FIX IT
             setOfTests[numberOfPlayers][x][y] = 0;
         }
     }
     clearMoves(numberOfPlayers);
-    
 }
 
 function rightMove(playerNumber){
