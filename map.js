@@ -1,4 +1,4 @@
-var atualizationFrame, time = 100, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","white","pink"], colisionStatus = false, visualMode = true;
+var atualizationFrame, time = 100, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","purple","pink"], colisionStatus = false, visualMode = true;
 var playerSet = [];
 
 window.onload = function(){
@@ -35,6 +35,7 @@ function run(){
 	}
 	executePlayers();
 	tryReset();
+	printScores();
 }
 
 function colision(){
@@ -59,6 +60,20 @@ function executePlayers(){
 			GeneticLearningExecution(x);
 		}
 	}	
+}
+
+function printScores(){
+	for(let x = 0; x < numberOfPlayers; x++){
+		//if(document.getElementById("player"+(x+1)+"BestScore").innerHTML < playerSet[x].score){
+		//	document.getElementById("player"+(x+1)+"BestScore").innerHTML = playerSet[x].score
+		//}
+		document.getElementById("player"+(x+1)+"Score").innerHTML = playerSet[x].score;
+	}
+	for(let y = 0; y < numberOfPlayers; y++){
+		if(document.getElementById("player"+(y+1)+"BestScore").innerHTML < playerSet[y].score){
+			document.getElementById("player"+(y+1)+"BestScore").innerHTML = playerSet[y].score
+		}
+	}
 }
 
 function paintPlayer(playerNumber){
