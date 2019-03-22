@@ -151,8 +151,8 @@ function setScore(playerNumber){
 			}
 			playerSet[playerNumber].lastYPosition = playerSet[playerNumber].py;			
 		break;
-		case 4:
-        if(playerSet[playerNumber].lastXPosition < playerSet[playerNumber].px){
+		case 4: // aumentaX >>   aumentaY^^^
+        if(playerSet[playerNumber].lastXPosition > playerSet[playerNumber].px){
             playerSet[playerNumber].score += (playerSet[playerNumber].lastXPosition/20) + 45;
 			}else if(playerSet[playerNumber].lastXPosition < playerSet[playerNumber].px){
 				playerSet[playerNumber].score -= (playerSet[playerNumber].lastXPosition/20) + 45;
