@@ -57,7 +57,7 @@ function executePlayers(){
 	for(let x = 0; x < numberOfPlayers; x++){
 		if(playerSet[x].alive){
 			paintPlayer(x);
-			GeneticLearningExecution(x);
+			geneticLearningExecution(x);
 		}
 	}	
 }

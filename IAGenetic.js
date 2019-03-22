@@ -1,13 +1,13 @@
-var time = 100, ctx, stage,numberOfPlayers = 1, testMoves = [], testSave = [], setOfTests = [], setOfScores = [];
+var time = 100, testMoves = [], testSave = [], setOfTests = [], setOfScores = [];
 
-function GeneticLearningExecution(playerNumber){
+function geneticLearningExecution(playerNumber){
 	setScore(playerNumber);
 	if(!manualMode){
 		rightMove(playerNumber);
 	}
 }
 function resetGeneticLearning(playerNumber){
-    clearMoves(playerNumber);
+    clearMoves(playerNumber); 
 }
 function startGeneticLearning(playerNumber){
     testMoves[playerNumber] = []; 
@@ -75,6 +75,7 @@ function constructor(score, playerNumber){
 	}
 	realTestNumber = 1;
 }
+
 function compiler(playerNumber){
 	let aux;
 	let setAux = [];
@@ -102,3 +103,4 @@ function compiler(playerNumber){
 
 	clearTestAndScore(playerNumber,5);
 }
+
