@@ -62,10 +62,10 @@ function clearTestAndScore(playerNumber, idx){
 	}
 }
 
-function constructor(testMoves, score, playerNumber){
+function constructor(score, playerNumber){
 
-	for (var i = 0; i < testMoves.length; i++) {
-		setOfTests[playerNumber][testNumber%11][i] = testMoves[i];
+	for (var i = 0; i < testMoves[playerNumber].length; i++) {
+		setOfTests[playerNumber][testNumber%11][i] = testMoves[playerNumber][i];
 	}
 	setOfScores[playerNumber][testNumber%11] = score;
 	if(testNumber%10 == 0){

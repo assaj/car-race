@@ -95,7 +95,7 @@ function newPlayer(){
 }
 function gameReset(){
 	for(let x = 0; x < numberOfPlayers ; x++){
-		constructor(testMoves[x],playerSet[x].score,x);
+		constructor(playerSet[x].score,x);
 		playerSet[x].px = x * 20;
 		playerSet[x].py = 460;
 		playerSet[x].alive = true;
