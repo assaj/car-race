@@ -100,7 +100,17 @@ function compiler(playerNumber){
 			}
 		}
 	}
-
+	
 	clearTestAndScore(playerNumber,5);
+	//mutation(playerNumber);
 }
 
+function mutation(playerNumber){
+
+	let aux = 0;
+	let auxb = 0;
+	while(setOfTests[playerNumber][aux][auxb+1] != 0){
+		setOfTests[playerNumber][a] = setOfTests[playerNumber][0];
+	}
+	
+}
