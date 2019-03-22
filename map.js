@@ -1,4 +1,4 @@
-var time = 100, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","white","pink"], colisionStatus = false, visualMode = true;
+var atualizationFrame, time = 100, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","white","pink"], colisionStatus = false, visualMode = true;
 var playerSet = [];
 
 window.onload = function(){
@@ -6,10 +6,14 @@ window.onload = function(){
 	ctx = stage.getContext("2d");
 	ctx.fillStyle = "grey";
 	ctx.fillRect(0,0, stage.width, stage.height);
-	changeTime();
 }
 
+atualizationFrame = setInterval(run, 100);
+
 function run(){
+
+	buttons();
+
 	if(visualMode){
 		ctx.fillStyle = "grey";
 		ctx.fillRect(0,0, stage.width, stage.height);
@@ -164,15 +168,15 @@ function section(playerNumber){
 }
 
 function changeColisionStatus(){
-    colisionStatus ? colisionStatus = false : colisionStatus = true;
+    colisionStatus = document.getElementById("colisionCheck").checked;
 }
 
 function changeVisualMode(){
-    visualMode ? visualMode = false : visualMode = true;
+	visualMode = document.getElementById("visualCheck").checked;
 }
 
-function ManualMode(){
-	manualMode ? manualMode = false : manualMode = true;
+function changemanualMode(){
+	manualMode = document.getElementById("manualModeCheck").checked;
 }
 
 function playerMovement(command, playerNumber){
@@ -180,6 +184,14 @@ function playerMovement(command, playerNumber){
 }
 
 function changeTime(){
-	let a = document.getElementById("myRange").value;
-	setInterval(run, 100 - a);
+	clearInterval(atualizationFrame);
+	let x = document.getElementById("velocity").value;
+	atualizationFrame = setInterval(run, 100 - x);
+}
+
+function buttons(){
+	changeTime();
+	changeVisualMode();
+	changeColisionStatus();
+	changemanualMode();
 }

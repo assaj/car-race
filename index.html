@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 	<title>CAR RACE</title>
 </head>
 <body>
-	<button onclick="newPlayer()">Create a new player</button>
-	<button onclick="gameReset()">Reset</button>
-	<button onclick="changeVisualMode()">Stop print the game</button>
-	<button onclick="ManualMode()">Manual Mode</button>
-	<button onclick="changeColisionStatus()">Colision On/Off</button>
-	<input type="range" id="myRange" value="0">
-	<button onclick="changeTime()">Set Velocity</button>
-<canvas id="stage" width="600" height="600"></canvas>
-
+	<section style= "float: right;">
+		<button onclick="newPlayer()" style="width: 100px; height: 60px; background-color: green">New player</button>
+		<button onclick="gameReset()" style="width: 100px; height: 60px; background-color: red">Reset</button>
+		</br>
+		Manual Mode:<input type="checkbox" id="manualModeCheck">
+		Colision:<input type="checkbox" id="colisionCheck">
+		Visualization:<input type="checkbox" id="visualCheck" checked = true>
+		</br>
+		Velocity:<input type="range" id="velocity" value="0">
+	</section>
+	<aside style = "width: 600px; height: 600px; float: left;"><canvas id="stage" width="600" height="600"></canvas></aside>
 </body>
 <footer>
+	Controller for manual mode: (Temporary)</br>
 	<button onclick="playerMovement(2,0)">LEFT</button>
 	<button onclick="playerMovement(1,0)">RIGHT</button>
 	<button onclick="playerMovement(3,0)">UP</button>
