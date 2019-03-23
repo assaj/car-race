@@ -57,9 +57,11 @@ function executePlayers(){
 	for(let x = 0; x < numberOfPlayers; x++){
 		if(playerSet[x].alive){
 			paintPlayer(x);
+			setScore(x);
 			geneticLearningExecution(x);
 		}
-	}	
+	}
+	testTime++;	// It's can explode.
 }
 
 function printScores(){
@@ -71,9 +73,10 @@ function printScores(){
 	}
 	for(let y = 0; y < numberOfPlayers; y++){
 		if(document.getElementById("player"+(y+1)+"BestScore").innerHTML < playerSet[y].score){
-			document.getElementById("player"+(y+1)+"BestScore").innerHTML = playerSet[y].score
+			document.getElementById("player"+(y+1)+"BestScore").innerHTML = playerSet[y].score;
 		}
 	}
+	document.getElementById("genetarion").innerHTML = generation;
 }
 
 function paintPlayer(playerNumber){
@@ -95,16 +98,13 @@ function newPlayer(){
 }
 function gameReset(){
 	for(let x = 0; x < numberOfPlayers ; x++){
-		constructor(playerSet[x].score,x);
 		playerSet[x].px = x * 20;
 		playerSet[x].py = 460;
 		playerSet[x].alive = true;
 		playerSet[x].score = 0;
-		resetGeneticLearning(x);
-		paintPlayer(x);		
+		resetGeneticLearning(playerSet[x].score, x);
+		paintPlayer(x);	
 	}
-	testTime = 0;
-	testNumber++;
 }
 function tryReset(){
 	let gameOn = false;
