@@ -62,7 +62,7 @@ function executePlayers(){
 		if(playerSet[x].player.alive){
 			paintPlayer(x);
 			setScore(x);
-			if(moves[x][turnTime % playerSet[x].algorithm.generationSize] == 0){
+			if(moves[x][turnTime % playerSet[x].algorithm.generationSize] == 0){console.log("sssd")
 				playerSet[x].player.movement(Math.floor((Math.random() * 4) + 1));
 			}else{
 				playerSet[x].player.movement(moves[x][turnTime % playerSet[x].algorithm.generationSize]);
