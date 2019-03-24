@@ -31,7 +31,7 @@ function GeneticAlgorithm (maxMoves){
                 this.population[x][y] = Math.floor((Math.random() * 4) + 1);
             }
         }
-        console.log(this.population[0]);
+       
         return this.population[0];
     }
 
@@ -52,6 +52,7 @@ function GeneticAlgorithm (maxMoves){
                 }
             }
         }
+        
     }
 
     this.crossOver = function(){
