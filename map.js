@@ -6,6 +6,12 @@ window.onload = function(){
 	ctx = stage.getContext("2d");
 	ctx.fillStyle = "grey";
 	ctx.fillRect(0,0, stage.width, stage.height);
+	ctx.fillStyle = "grey";
+	ctx.fillRect(0,0, stage.width, stage.height);
+	ctx.fillStyle = "yellow";
+	ctx.fillRect(100,100,400,400);
+	ctx.fillStyle = "green";
+	ctx.fillRect(0,480,100,20);
 }
 
 function run(){
@@ -92,6 +98,7 @@ function newPlayer(){
 			new GeneticAlgorithm(maxMoves)
 		);
 		moves[numberOfPlayers] = playerSet[numberOfPlayers].algorithm.start();
+		paintPlayer(numberOfPlayers);
 		numberOfPlayers++;
 	}
 }
