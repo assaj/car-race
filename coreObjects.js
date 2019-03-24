@@ -49,3 +49,7 @@ function Player (color, px, py){
     }
 };
 
+function NewPlayer (player, algorithm){
+    this.player = player;
+    this.algorithm = algorithm;
+}

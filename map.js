@@ -1,4 +1,4 @@
-var atualizationFrame, time = 100, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","purple","pink"], colisionStatus = false, visualMode = true;
+var testTime = 0, turnTime = 0, moves = [], atualizationFrame, time = 100, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","purple","pink"], colisionStatus = false, visualMode = true, maxMoves = 200, manualMode = false;
 var playerSet = [];
 
 window.onload = function(){
@@ -7,8 +7,6 @@ window.onload = function(){
 	ctx.fillStyle = "grey";
 	ctx.fillRect(0,0, stage.width, stage.height);
 }
-
-atualizationFrame = setInterval(run, 100);
 
 function run(){
 
@@ -23,11 +21,8 @@ function run(){
 		ctx.fillRect(0,480,100,20);
 	}
 	for(let x = 0; x < numberOfPlayers; x++){
-			if(playerSet[x].alive){
-				playerSet[x].tryKill();
-				if(colisionStatus){
-					colision()
-				}
+			if(playerSet[x].player.alive){
+				playerSet[x].player.tryKill();
 			}
 	}	
 	if(colisionStatus){
@@ -36,16 +31,17 @@ function run(){
 	executePlayers();
 	tryReset();
 	printScores();
+	turnTime++;
 }
 
 function colision(){
 	for(let x = 0; x < numberOfPlayers; x++){
-		if(playerSet[x].alive){
+		if(playerSet[x].player.alive){
 			for(let y = 0; y < numberOfPlayers; y++){
-				if(x != y && playerSet[y].alive){
-					if(playerSet[x].px == playerSet[y].px && playerSet[x].py == playerSet[y].py){
-						playerSet[x].alive = false;
-						playerSet[y].alive = false;
+				if(x != y && playerSet[y].player.alive){
+					if(playerSet[x].player.px == playerSet[y].player.px && playerSet[x].player.py == playerSet[y].player.py){
+						playerSet[x].player.alive = false;
+						playerSet[y].player.alive = false;
 					}
 				}
 			}
@@ -55,34 +51,34 @@ function colision(){
 
 function executePlayers(){
 	for(let x = 0; x < numberOfPlayers; x++){
-		if(playerSet[x].alive){
+		if(playerSet[x].player.alive){
 			paintPlayer(x);
 			setScore(x);
-			geneticLearningExecution(x);
+			if(moves[x][turnTime % playerSet[x].algorithm.generationSize] == 0){
+				playerSet[x].player.movement(Math.floor((Math.random() * 4) + 1));
+			}else{
+				playerSet[x].player.movement(moves[x][turnTime % playerSet[x].algorithm.generationSize]);
+			}
 		}
 	}
-	testTime++;	// It's can explode.
 }
 
 function printScores(){
 	for(let x = 0; x < numberOfPlayers; x++){
-		//if(document.getElementById("player"+(x+1)+"BestScore").innerHTML < playerSet[x].score){
-		//	document.getElementById("player"+(x+1)+"BestScore").innerHTML = playerSet[x].score
-		//}
-		document.getElementById("player"+(x+1)+"Score").innerHTML = playerSet[x].score;
+		document.getElementById("player"+(x+1)+"Score").innerHTML = playerSet[x].player.score;
 	}
 	for(let y = 0; y < numberOfPlayers; y++){
-		if(document.getElementById("player"+(y+1)+"BestScore").innerHTML < playerSet[y].score){
-			document.getElementById("player"+(y+1)+"BestScore").innerHTML = playerSet[y].score;
+		if(document.getElementById("player"+(y+1)+"BestScore").innerHTML < playerSet[y].player.score){
+			document.getElementById("player"+(y+1)+"BestScore").innerHTML = playerSet[y].player.score;
 		}
 	}
-	document.getElementById("genetarion").innerHTML = generation;
+	document.getElementById("genetarion").innerHTML = testTime;
 }
 
 function paintPlayer(playerNumber){
 	if(visualMode){	
-		ctx.fillStyle = playerSet[playerNumber].color;
-		ctx.fillRect(playerSet[playerNumber].px,playerSet[playerNumber].py,20,20);//X,Y,WIDTH,HEIGHT
+		ctx.fillStyle = playerSet[playerNumber].player.color;
+		ctx.fillRect(playerSet[playerNumber].player.px,playerSet[playerNumber].player.py,20,20);//X,Y,WIDTH,HEIGHT
 	}
 }
 
@@ -91,25 +87,29 @@ function newPlayer(){
 	if(numberOfPlayers > 4){
 		alert("The max number of player is 5.");
 	}else{ 
-		playerSet[numberOfPlayers] = new Player(setOfColors[numberOfPlayers], (numberOfPlayers) * 20, 460);
-        startGeneticLearning(numberOfPlayers);
+		playerSet[numberOfPlayers] = new NewPlayer(
+			new Player(setOfColors[numberOfPlayers], (numberOfPlayers) * 20, 460),
+			new GeneticAlgorithm(maxMoves)
+		);
+		moves[numberOfPlayers] = playerSet[numberOfPlayers].algorithm.start();
 		numberOfPlayers++;
 	}
 }
 function gameReset(){
 	for(let x = 0; x < numberOfPlayers ; x++){
-		playerSet[x].px = x * 20;
-		playerSet[x].py = 460;
-		playerSet[x].alive = true;
-		playerSet[x].score = 0;
-		resetGeneticLearning(playerSet[x].score, x);
+		playerSet[x].player.px = x * 20;
+		playerSet[x].player.py = 460;
+		playerSet[x].player.alive = true;
+		moves[x] = playerSet[x].algorithm.save(playerSet[x].player.score, testTime);
+		playerSet[x].player.score = 0;
 		paintPlayer(x);	
+		testTime++;	// It's can explode.
 	}
 }
 function tryReset(){
 	let gameOn = false;
 	for(let i = 0; i < numberOfPlayers ; i++){
-		if(playerSet[i].alive){
+		if(playerSet[i].player.alive){
 		 	gameOn = true;
 		}
 	}
@@ -122,59 +122,59 @@ function setScore(playerNumber){
 
 	switch(section(playerNumber)){
 		case 1:
-			if(playerSet[playerNumber].lastYPosition > playerSet[playerNumber].py){
-				playerSet[playerNumber].score += ((playerSet[playerNumber].py - 460) / 20) * -1; 
-			}else if(playerSet[playerNumber].lastYPosition < playerSet[playerNumber].py){
-				playerSet[playerNumber].score -=((playerSet[playerNumber].lastYPosition - 460) / 20) * -1;
+			if(playerSet[playerNumber].player.lastYPosition > playerSet[playerNumber].player.py){
+				playerSet[playerNumber].player.score += ((playerSet[playerNumber].player.py - 460) / 20) * -1; 
+			}else if(playerSet[playerNumber].player.lastYPosition < playerSet[playerNumber].player.py){
+				playerSet[playerNumber].player.score -=((playerSet[playerNumber].player.lastYPosition - 460) / 20) * -1;
 			}else{
-				//playerSet[playerNumber].score -= 1;
+				//playerSet[playerNumber].player.score -= 1;
 			}
-			playerSet[playerNumber].lastYPosition = playerSet[playerNumber].py;
+			playerSet[playerNumber].player.lastYPosition = playerSet[playerNumber].player.py;
 		break;
 		case 2:
-			if(playerSet[playerNumber].lastXPosition < playerSet[playerNumber].px){
-				playerSet[playerNumber].score += (playerSet[playerNumber].lastXPosition/20) + 15;
-			}else if(playerSet[playerNumber].lastXPosition > playerSet[playerNumber].px){
-				playerSet[playerNumber].score -= (playerSet[playerNumber].lastXPosition/20) + 15;
+			if(playerSet[playerNumber].player.lastXPosition < playerSet[playerNumber].player.px){
+				playerSet[playerNumber].player.score += (playerSet[playerNumber].player.lastXPosition/20) + 15;
+			}else if(playerSet[playerNumber].player.lastXPosition > playerSet[playerNumber].player.px){
+				playerSet[playerNumber].player.score -= (playerSet[playerNumber].player.lastXPosition/20) + 15;
 			}else{
-				//playerSet[playerNumber].score -= 1;
+				//playerSet[playerNumber].player.score -= 1;
 			}
-			playerSet[playerNumber].lastXPosition = playerSet[playerNumber].px;
+			playerSet[playerNumber].player.lastXPosition = playerSet[playerNumber].player.px;
 		break;
 		case 3:
-			if(playerSet[playerNumber].lastYPosition < playerSet[playerNumber].py){
-				playerSet[playerNumber].score += (((playerSet[playerNumber].py - 460) / 20) * -1) +30; 
-			}else if(playerSet[playerNumber].lastYPosition > playerSet[playerNumber].py){
-				playerSet[playerNumber].score -=(((playerSet[playerNumber].lastYPosition - 460) / 20) * -1) +30;
+			if(playerSet[playerNumber].player.lastYPosition < playerSet[playerNumber].player.py){
+				playerSet[playerNumber].player.score += (((playerSet[playerNumber].player.py - 460) / 20) * -1) +30; 
+			}else if(playerSet[playerNumber].player.lastYPosition > playerSet[playerNumber].player.py){
+				playerSet[playerNumber].player.score -=(((playerSet[playerNumber].player.lastYPosition - 460) / 20) * -1) +30;
 			}else{
-				//playerSet[playerNumber].score -= 1;
+				//playerSet[playerNumber].player.score -= 1;
 			}
-			playerSet[playerNumber].lastYPosition = playerSet[playerNumber].py;			
+			playerSet[playerNumber].player.lastYPosition = playerSet[playerNumber].player.py;			
 		break;
 		case 4: 
-        if(playerSet[playerNumber].lastXPosition > playerSet[playerNumber].px){
-            playerSet[playerNumber].score += (playerSet[playerNumber].lastXPosition/20) + 45;
-			}else if(playerSet[playerNumber].lastXPosition < playerSet[playerNumber].px){
-				playerSet[playerNumber].score -= (playerSet[playerNumber].lastXPosition/20) + 45;
+        if(playerSet[playerNumber].player.lastXPosition > playerSet[playerNumber].player.px){
+            playerSet[playerNumber].player.score += (playerSet[playerNumber].player.lastXPosition/20) + 45;
+			}else if(playerSet[playerNumber].player.lastXPosition < playerSet[playerNumber].player.px){
+				playerSet[playerNumber].player.score -= (playerSet[playerNumber].player.lastXPosition/20) + 45;
 			}else{
-				//playerSet[playerNumber].score -= 1;
+				//playerSet[playerNumber].player.score -= 1;
 			}
-			playerSet[playerNumber].lastXPosition = playerSet[playerNumber].px;			
+			playerSet[playerNumber].player.lastXPosition = playerSet[playerNumber].player.px;			
 		break;
 	}
 }
 function section(playerNumber){
 
-	if(playerSet[playerNumber].py <= 480 && playerSet[playerNumber].py >=100){
+	if(playerSet[playerNumber].player.py <= 480 && playerSet[playerNumber].player.py >=100){
 		//1 or 3
-		if(playerSet[playerNumber].px < 100){
+		if(playerSet[playerNumber].player.px < 100){
 			return 1;
 		}else{
 			return 3;
 		}
 	}else{
 		// 2 or 4
-		if(playerSet[playerNumber].py < 100){
+		if(playerSet[playerNumber].player.py < 100){
 			return 2;
 		}else{
 			return 4;
@@ -195,7 +195,7 @@ function changemanualMode(){
 }
 
 function playerMovement(command, playerNumber){
-	playerSet[playerNumber].movement(command);
+	playerSet[playerNumber].player.movement(command);
 }
 
 function changeTime(){
@@ -203,7 +203,9 @@ function changeTime(){
 	let x = document.getElementById("velocity").value;
 	atualizationFrame = setInterval(run, 100 - x);
 }
-
+function startGame(){
+	setInterval(run, 100);
+}
 function buttons(){
 	changeTime();
 	changeVisualMode();
