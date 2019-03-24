@@ -52,7 +52,6 @@ function GeneticAlgorithm (maxMoves){
                 }
             }
         }
-        
     }
 
     this.crossOver = function(){

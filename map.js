@@ -2,8 +2,10 @@ var testTime = 0, turnTime = 0, moves = [], atualizationFrame, time = 100, ctx, 
 var playerSet = [];
 
 window.onload = function(){
+
 	stage = document.getElementById('stage');
 	ctx = stage.getContext("2d");
+
 	ctx.fillStyle = "grey";
 	ctx.fillRect(0,0, stage.width, stage.height);
 	ctx.fillStyle = "grey";
@@ -107,6 +109,8 @@ function gameReset(){
 		playerSet[x].player.px = x * 20;
 		playerSet[x].player.py = 460;
 		playerSet[x].player.alive = true;
+		playerSet[x].player.lastXPosition = playerSet[x].player.px;
+		playerSet[x].player.lastYPosition = playerSet[x].player.py;
 		moves[x] = playerSet[x].algorithm.save(playerSet[x].player.score, testTime);
 		playerSet[x].player.score = 0;
 		paintPlayer(x);	
