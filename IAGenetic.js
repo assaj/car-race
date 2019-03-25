@@ -5,14 +5,14 @@ function GeneticAlgorithm (maxMoves){
     this.maxMoves = maxMoves;
     this.scoreSet = [];
 
-    this.save = function(score, time, invalidate){
-
+    this.save = function(score, time, invalidateTurn){
+        console.log(invalidateTurn);
         time == 0 ? time = 0 : this.scoreSet[time % this.generationSize -1] = score;
         
         if(time % this.generationSize == this.generationSize - 1){
             this.selection();
         }
-        this.invalidation(invalidate, time);
+        this.invalidation(invalidateTurn, time);
         return this.population[time % this.generationSize];
     }
     this.selection = function(){
@@ -104,22 +104,11 @@ function GeneticAlgorithm (maxMoves){
                 arr[a][aux] = this.population[one][aux];
                 aux++;
             }
-            console.log("aux: "+aux);
-            console.log("inicio: "+ arr[a]);
-            console.log("inicio: "+ arr[a].length);
+            
             for(let b = aux; b < this.population[two].length; b++){
                 arr[a][b] = this.population[two][b];
             }
-            //console.log(this.population);
-            
-            console.log(one);
-            console.log("one: "+this.population[one]);
-    
-            console.log(two);
-            console.log("two: "+this.population[two]);
-          
-            console.log("fim: "+ arr[a]);
-            console.log("fim: "+ arr[a].length);
+ 
             one = 0;
             two = 0;
             aux = 0;
@@ -135,7 +124,6 @@ function GeneticAlgorithm (maxMoves){
     this.invalidation = function(idx, time){
         for(let a = idx; a < this.maxMoves; a++){
             let aux = time % this.generationSize;
-            aux == 0 ? aux = 100 : aux = aux + 1 ;
             this.population[aux][a] = 0;
         }
     }

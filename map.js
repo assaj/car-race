@@ -61,19 +61,13 @@ function executePlayers(){
 	for(let x = 0; x < numberOfPlayers; x++){
 		if(playerSet[x].player.alive){
 			paintPlayer(x);
-			//console.log("------------------------");
-			//console.log(turnTime);
-			//console.log("index : "+ turnTime % playerSet[x].algorithm.generationSize);
-			//console.log("move: "+moves[x][turnTime % playerSet[x].algorithm.generationSize]);
-			//console.log("before : "+ playerSet[x].player.score);
 			setScore(x);
-			
-			//console.log(moves[x][turnTime % playerSet[x].algorithm.generationSize]);
-			//console.log("after : "+ playerSet[x].player.score);
-			if(moves[x][turnTime % playerSet[x].algorithm.generationSize] == 0){console.log("sssd")
-				playerSet[x].player.movement(Math.floor((Math.random() * 4) + 1));
-			}else{
-				playerSet[x].player.movement(moves[x][turnTime % playerSet[x].algorithm.generationSize]);
+			if(!manualMode){
+				if(moves[x][turnTime % playerSet[x].algorithm.generationSize] == 0){
+					playerSet[x].player.movement(Math.floor((Math.random() * 4) + 1));
+				}else{
+					playerSet[x].player.movement(moves[x][turnTime % playerSet[x].algorithm.generationSize]);
+				}
 			}
 		}
 	}
@@ -114,8 +108,9 @@ function newPlayer(){
 }
 function gameReset(){
 	for(let x = 0; x < numberOfPlayers ; x++){
-		playerSet[x].reset(x * 20, 460);
 		moves[x] = playerSet[x].algorithm.save(playerSet[x].player.score, testTime, playerSet[x].player.turnDie);
+		console.log(playerSet[x].player);
+		playerSet[x].player.reset(x * 20, 460);
 		playerSet[x].player.score = 0;
 		paintPlayer(x);	
 		testTime++;	// It's can explode.
