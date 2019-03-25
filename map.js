@@ -1,4 +1,4 @@
-var testTime = 0, turnTime = 0, moves = [], atualizationFrame, time = 100, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","purple","pink"], colisionStatus = false, visualMode = true, maxMoves = 200, manualMode = false;
+var testTime = 0, turnTime = 0, moves = [], atualizationFrame, time = 1000, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","purple","pink"], colisionStatus = false, visualMode = true, maxMoves = 200, manualMode = false;
 var playerSet = [];
 
 window.onload = function(){
@@ -30,7 +30,7 @@ function run(){
 	}
 	for(let x = 0; x < numberOfPlayers; x++){
 			if(playerSet[x].player.alive){
-				playerSet[x].player.tryKill();
+				playerSet[x].player.tryKill(turnTime);
 			}
 	}	
 	if(colisionStatus){
@@ -61,7 +61,15 @@ function executePlayers(){
 	for(let x = 0; x < numberOfPlayers; x++){
 		if(playerSet[x].player.alive){
 			paintPlayer(x);
+			//console.log("------------------------");
+			//console.log(turnTime);
+			//console.log("index : "+ turnTime % playerSet[x].algorithm.generationSize);
+			//console.log("move: "+moves[x][turnTime % playerSet[x].algorithm.generationSize]);
+			//console.log("before : "+ playerSet[x].player.score);
 			setScore(x);
+			
+			//console.log(moves[x][turnTime % playerSet[x].algorithm.generationSize]);
+			//console.log("after : "+ playerSet[x].player.score);
 			if(moves[x][turnTime % playerSet[x].algorithm.generationSize] == 0){console.log("sssd")
 				playerSet[x].player.movement(Math.floor((Math.random() * 4) + 1));
 			}else{
@@ -106,15 +114,12 @@ function newPlayer(){
 }
 function gameReset(){
 	for(let x = 0; x < numberOfPlayers ; x++){
-		playerSet[x].player.px = x * 20;
-		playerSet[x].player.py = 460;
-		playerSet[x].player.alive = true;
-		playerSet[x].player.lastXPosition = playerSet[x].player.px;
-		playerSet[x].player.lastYPosition = playerSet[x].player.py;
-		moves[x] = playerSet[x].algorithm.save(playerSet[x].player.score, testTime);
+		playerSet[x].reset(x * 20, 460);
+		moves[x] = playerSet[x].algorithm.save(playerSet[x].player.score, testTime, playerSet[x].player.turnDie);
 		playerSet[x].player.score = 0;
 		paintPlayer(x);	
 		testTime++;	// It's can explode.
+		turnTime = -1;
 	}
 }
 function tryReset(){
