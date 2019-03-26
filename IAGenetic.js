@@ -14,6 +14,7 @@ function GeneticAlgorithm (maxMoves){
         }
         this.invalidation(invalidateTurn, time);
         return this.population[time % this.generationSize];
+        this.invalidation(invalidateTurn, time);
     }
     this.selection = function(time){
 
@@ -92,6 +93,9 @@ function GeneticAlgorithm (maxMoves){
 
             for(let b = 0; b < this.maxMoves; b++){
                 if(this.population[one][b] == 0 && this.population[two][b] == 0){
+                    for(let c = b; c < this.maxMoves; c++){
+                        arr[a][c] = 0;
+                    }
                     b = this.maxMoves;
                 }else{
                     if(b%2 == 0 && this.population[one][b] != 0){

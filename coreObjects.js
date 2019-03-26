@@ -9,6 +9,7 @@ function Player (color, px, py){
         this.score = 0;
         this.alive = true;
         this.turnDie = -1;
+        this.lastSection = 1;
 
     this.tryKill = function(turn){ // Without colision kill
         if(this.px >= 100 && this.py >= 100 && this.py < 500 && this.px < 500){
