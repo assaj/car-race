@@ -137,41 +137,47 @@ function setScore(playerNumber){
 				playerSet[playerNumber].player.score += ((playerSet[playerNumber].player.py - 460) / 20) * -1; 
 			}else if(playerSet[playerNumber].player.lastYPosition < playerSet[playerNumber].player.py){
 				playerSet[playerNumber].player.score -=((playerSet[playerNumber].player.lastYPosition - 460) / 20) * -1;
-			}else{
-				//playerSet[playerNumber].player.score -= 1;
+			}else if(playerSet[playerNumber].player.lastXPosition < playerSet[playerNumber].player.px){
+				playerSet[playerNumber].player.score += (playerSet[playerNumber].player.lastXPosition/20);
+			}else if(playerSet[playerNumber].player.lastXPosition > playerSet[playerNumber].player.px){
+				playerSet[playerNumber].player.score -= (playerSet[playerNumber].player.lastXPosition/20);
 			}
-			playerSet[playerNumber].player.lastYPosition = playerSet[playerNumber].player.py;
 		break;
 		case 2:
 			if(playerSet[playerNumber].player.lastXPosition < playerSet[playerNumber].player.px){
 				playerSet[playerNumber].player.score += (playerSet[playerNumber].player.lastXPosition/20) + 15;
 			}else if(playerSet[playerNumber].player.lastXPosition > playerSet[playerNumber].player.px){
 				playerSet[playerNumber].player.score -= (playerSet[playerNumber].player.lastXPosition/20) + 15;
-			}else{
-				//playerSet[playerNumber].player.score -= 1;
+			}else if(playerSet[playerNumber].player.lastYPosition < playerSet[playerNumber].player.py){
+				playerSet[playerNumber].player.score += (((playerSet[playerNumber].player.py - 460) / 20) * -1) +15; 
+			}else if(playerSet[playerNumber].player.lastYPosition > playerSet[playerNumber].player.py){
+				playerSet[playerNumber].player.score -=(((playerSet[playerNumber].player.lastYPosition - 460) / 20) * -1) +15;
 			}
-			playerSet[playerNumber].player.lastXPosition = playerSet[playerNumber].player.px;
 		break;
 		case 3:
 			if(playerSet[playerNumber].player.lastYPosition < playerSet[playerNumber].player.py){
-				playerSet[playerNumber].player.score += (((playerSet[playerNumber].player.py - 460) / 20) * -1) +30; 
+				playerSet[playerNumber].player.score += (((playerSet[playerNumber].player.py - 460) / 20) * -1) + 30; 
 			}else if(playerSet[playerNumber].player.lastYPosition > playerSet[playerNumber].player.py){
-				playerSet[playerNumber].player.score -=(((playerSet[playerNumber].player.lastYPosition - 460) / 20) * -1) +30;
-			}else{
-				//playerSet[playerNumber].player.score -= 1;
-			}
-			playerSet[playerNumber].player.lastYPosition = playerSet[playerNumber].player.py;			
+				playerSet[playerNumber].player.score -=(((playerSet[playerNumber].player.lastYPosition - 460) / 20) * -1) + 30;
+			}else if(playerSet[playerNumber].player.lastXPosition > playerSet[playerNumber].player.px){
+        		playerSet[playerNumber].player.score += (playerSet[playerNumber].player.lastXPosition/20) + 30;
+			}else if(playerSet[playerNumber].player.lastXPosition < playerSet[playerNumber].player.px){
+				playerSet[playerNumber].player.score -= (playerSet[playerNumber].player.lastXPosition/20) + 30;
+			}	
 		break;
 		case 4: 
-        if(playerSet[playerNumber].player.lastXPosition > playerSet[playerNumber].player.px){
-            playerSet[playerNumber].player.score += (playerSet[playerNumber].player.lastXPosition/20) + 45;
+        	if(playerSet[playerNumber].player.lastXPosition > playerSet[playerNumber].player.px){
+        		playerSet[playerNumber].player.score += (playerSet[playerNumber].player.lastXPosition/20) + 45;
 			}else if(playerSet[playerNumber].player.lastXPosition < playerSet[playerNumber].player.px){
 				playerSet[playerNumber].player.score -= (playerSet[playerNumber].player.lastXPosition/20) + 45;
-			}else{
-				//playerSet[playerNumber].player.score -= 1;
-			}
-			playerSet[playerNumber].player.lastXPosition = playerSet[playerNumber].player.px;			
+			}else if(playerSet[playerNumber].player.lastYPosition > playerSet[playerNumber].player.py){
+				playerSet[playerNumber].player.score += ((playerSet[playerNumber].player.py - 460) / 20) * -45; 
+			}else if(playerSet[playerNumber].player.lastYPosition < playerSet[playerNumber].player.py){
+				playerSet[playerNumber].player.score -=((playerSet[playerNumber].player.lastYPosition - 460) / 20) * -45;
+			}		
 		break;
+		playerSet[playerNumber].player.lastXPosition = playerSet[playerNumber].player.px;	
+		playerSet[playerNumber].player.lastYPosition = playerSet[playerNumber].player.py;				
 	}
 }
 function section(playerNumber){
