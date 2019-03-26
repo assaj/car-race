@@ -109,7 +109,7 @@ function newPlayer(){
 function gameReset(){
 	for(let x = 0; x < numberOfPlayers ; x++){
 		moves[x] = playerSet[x].algorithm.save(playerSet[x].player.score, testTime, playerSet[x].player.turnDie);
-		console.log(playerSet[x].player);
+		
 		playerSet[x].player.reset(x * 20, 460);
 		playerSet[x].player.score = 0;
 		paintPlayer(x);	

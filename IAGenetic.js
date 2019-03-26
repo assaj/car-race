@@ -4,23 +4,22 @@ function GeneticAlgorithm (maxMoves){
     this.generationSize = 100;
     this.maxMoves = maxMoves;
     this.scoreSet = [];
-
+    this.mutationRate = 100;
     this.save = function(score, time, invalidateTurn){
-        console.log(invalidateTurn);
+        
         time == 0 ? time = 0 : this.scoreSet[time % this.generationSize -1] = score;
         
         if(time % this.generationSize == this.generationSize - 1){
-            this.selection();
+            this.selection(time);
         }
         this.invalidation(invalidateTurn, time);
         return this.population[time % this.generationSize];
     }
-    this.selection = function(){
+    this.selection = function(time){
 
         //Selection:
         this.sort();
-        this.crossOver();
-        this.mutation();
+        this.crossOver(time);
 
     }
 
@@ -91,22 +90,19 @@ function GeneticAlgorithm (maxMoves){
             }
             two--;
 
-            idxSize = 0;
-            idxSize += this.scoreSet[one]; 
-            idxSize += this.scoreSet[two];
-
-            idxSize = idxSize/this.maxMoves;
-
-            acumulation = this.scoreSet[one];
-            aux = 0;
-            while(acumulation >= idxSize){
-                acumulation -= idxSize;
-                arr[a][aux] = this.population[one][aux];
-                aux++;
-            }
-            
-            for(let b = aux; b < this.population[two].length; b++){
-                arr[a][b] = this.population[two][b];
+            for(let b = 0; b < this.maxMoves; b++){
+                if(this.population[one][b] == 0 && this.population[two][b] == 0){
+                    b = this.maxMoves;
+                }else{
+                    if(b%2 == 0 && this.population[one][b] != 0){
+                        arr[a][b] = this.population[one][b];
+                    }else{
+                        arr[a][b] = this.population[two][b];
+                    }   
+                let aux2 = this.mutation();
+                aux2 == 1 ? arr[a][b] = Math.floor((Math.random() * 4) + 1) : arr[a][b] += 0;  
+                }
+               
             }
  
             one = 0;
@@ -118,7 +114,7 @@ function GeneticAlgorithm (maxMoves){
     }
 
     this.mutation = function(){
-
+        return Math.floor((Math.random() * this.mutationRate) + 1);
     }
 
     this.invalidation = function(idx, time){
