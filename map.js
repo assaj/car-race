@@ -97,13 +97,36 @@ function newPlayer(){
 	if(numberOfPlayers > 4){
 		alert("The max number of player is 5.");
 	}else{ 
-		playerSet[numberOfPlayers] = new NewPlayer(
-			new Player(setOfColors[numberOfPlayers], (numberOfPlayers) * 20, 460),
-			new GeneticAlgorithm(maxMoves)
-		);
-		moves[numberOfPlayers] = playerSet[numberOfPlayers].algorithm.start();
-		paintPlayer(numberOfPlayers);
-		numberOfPlayers++;
+		let found = true;
+		let x = document.getElementById("algortihm").value;
+		switch(x){
+
+			case "IAGenetic":
+			playerSet[numberOfPlayers] = new NewPlayer(
+				new Player(setOfColors[numberOfPlayers], (numberOfPlayers) * 20, 460),
+				new GeneticAlgorithm(maxMoves)
+			);
+			break;
+
+			case "IAGenetic2":
+			playerSet[numberOfPlayers] = new NewPlayer(
+				new Player(setOfColors[numberOfPlayers], (numberOfPlayers) * 20, 460),
+				new GeneticAlgorithm2(maxMoves)
+			);
+			break;
+
+			default:
+				alert("Algorithm not found");
+				found = false;
+			break;
+		}
+		if(found){
+			moves[numberOfPlayers] = playerSet[numberOfPlayers].algorithm.start();
+			paintPlayer(numberOfPlayers);
+			numberOfPlayers++;	
+			document.getElementById("playerAlgorithm"+numberOfPlayers).innerHTML = x;
+		}
+	
 	}
 }
 function gameReset(){

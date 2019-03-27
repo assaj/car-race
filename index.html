@@ -7,34 +7,28 @@
 	<section style= "float: right;">
 		<button onclick="newPlayer()" style="width: 100px; height: 60px; background-color: green">New player</button>
 		<button onclick="startGame()" style="width: 100px; height: 60px; background-color: yellow">Start Game</button>
-		</br>
-		Manual Mode: <input type="checkbox" id="manualModeCheck"></br>
-		Colision: <input type="checkbox" id="colisionCheck"></br>
+		
+		Manual Mode: <input type="checkbox" id="manualModeCheck">
+		Colision: <input type="checkbox" id="colisionCheck">
 		Visualization: <input type="checkbox" id="visualCheck" checked = true></br>
 		</br>
 		Velocity: <input type="range" id="velocity" value="0">
+		Algorithm: <input id="algortihm" value="IAGenetic">
 	</section>
 	<aside style = "width: 600px; height: 600px; float: left;"><canvas id="stage" width="600" height="600"></canvas></aside>
 </body>
-<footer>
-	Controller for manual mode: (Temporary)</br>
-	<button onclick="playerMovement(2,0)">LEFT</button>
-	<button onclick="playerMovement(1,0)">RIGHT</button>
-	<button onclick="playerMovement(3,0)">UP</button>
-	<button onclick="playerMovement(4,0)">DOWN</button>
-</footer>
-<div style = "padding: 50px;">
+<div style = "padding: 20px;">
 	
 	Generation: </br>
 	<div id="genetarion" style="color: black;">0</div>
 	Best Scores: </br>
-		<div style="color: red;">Player 1 : <div id="player1BestScore">0</div></div>
-		<div style="color: blue;">Player 2 : <div id="player2BestScore">0</div></div>
-		<div style="color: black;">Player 3 : <div id="player3BestScore">0</div></div>
-		<div style="color: purple;">Player 4 : <div id="player4BestScore">0</div></div>
-		<div style="color: pink;">Player 5 : <div id="player5BestScore">0</div></div>
-	<div style = "padding: 50px;">
-	Current Scores: </br>
+		<div style="color: red;">Player 1 :<div id="playerAlgorithm1"></div> <div id="player1BestScore">0</div></div>
+		<div style="color: blue;">Player 2 :<div id="playerAlgorithm2"></div> <div id="player2BestScore">0</div></div>
+		<div style="color: black;">Player 3 :<div id="playerAlgorithm3"></div> <div id="player3BestScore">0</div></div>
+		<div style="color: purple;">Player 4 :<div id="playerAlgorithm4"></div> <div id="player4BestScore">0</div></div>
+		<div style="color: pink;">Player 5 :<div id="playerAlgorithm5"></div> <div id="player5BestScore">0</div></div>
+	<div style = "padding: 20px;">
+	Current Scores: 
 	<div style="color: red;">Player 1 : <div id="player1Score">0</div></div>
 	<div style="color: blue;">Player 2 : <div id="player2Score">0</div></div>
 	<div style="color: black;">Player 3 : <div id="player3Score">0</div></div>
@@ -43,7 +37,15 @@
 	</div>
 </div>
 </div>
+<footer>
+	Controller for manual mode: (Temporary)</br>
+	<button onclick="playerMovement(2,0)">LEFT</button>
+	<button onclick="playerMovement(1,0)">RIGHT</button>
+	<button onclick="playerMovement(3,0)">UP</button>
+	<button onclick="playerMovement(4,0)">DOWN</button>
+</footer>
 <script src = "coreObjects.js"type="text/javascript"></script>
+<script src = "IAGenetic2.js"type="text/javascript"></script>
 <script src = "IAGenetic.js"type="text/javascript"></script>
 <script src = "map.js"type="text/javascript"></script>
 </html>
