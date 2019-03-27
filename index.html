@@ -5,19 +5,29 @@
 </head>
 <body>
 	<section style= "float: right;">
-		<button onclick="newPlayer('algorithm')" style="width: 100px; height: 60px; background-color: green">New player by algorithm name</button>
-		<button onclick="newPlayer('name')" style="width: 100px; height: 60px; background-color: greenyellow">New player by maker name</button>
-	</br>
-		<button onclick="startGame()" style="width: 100px; height: 60px; background-color: yellow">Start Game</button>
 		
-		Manual Mode: <input type="checkbox" id="manualModeCheck">
-		Colision: <input type="checkbox" id="colisionCheck">
-		Visualization: <input type="checkbox" id="visualCheck" checked = true></br>
-		</br>
+	<div id="panel" style= "float: right; padding: 5px;">
+		<div style= "float: left ; ">
+		<button onclick="newPlayer('algorithm')" style="width: 50px; height: 60px; background-color: green">New </br>player</button>
+		<div style= "float: right;">
+		Algorithm:<input id="algortihm" value="IAGenetic" style= " background-color: rgb(0, 255, 255)"></br></br>
+		Maker:<input id="maker" value="Alex<assaj>" style= " background-color: rgb(0, 255, 255)">
+
+		</div>
+		
+		</div>
+		<div>
+	</br></br>
 	
-		Algorithm:<input id="algortihm" value="IAGenetic">
-		Maker:<input id="maker" value="Alex<assaj>"></br>
+	<button onclick="startGame()" style="width: 150px; height: 50px; background-color: yellow; ">Start </br>Game</button>
+		</br>
 		Velocity: <input type="range" id="velocity" value="0">
+		</div>
+			Manual Mode: <input type="checkbox" id="manualModeCheck"></br>
+		Colision: <input type="checkbox" id="colisionCheck"></br>
+		Visualization: <input type="checkbox" id="visualCheck" checked = true></br>
+		
+	</div>
 	</section>
 	<aside style = "width: 600px; height: 600px; float: left;"><canvas id="stage" width="600" height="600"></canvas></aside>
 </body>

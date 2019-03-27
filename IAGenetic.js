@@ -1,10 +1,11 @@
-function GeneticAlgorithm (maxMoves){
+function GeneticAlgorithm (maxMoves,maker){
 
     this.population = [];
     this.generationSize = 100;
     this.maxMoves = maxMoves;
     this.scoreSet = [];
     this.mutationRate = 100;
+    this.maker = maker;
     this.save = function(score, time, invalidateTurn){
         
         time == 0 ? time = 0 : this.scoreSet[time % this.generationSize -1] = score;
