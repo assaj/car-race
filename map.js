@@ -1,4 +1,4 @@
-var testTime = 0, turnTime = 0, moves = [], atualizationFrame, time = 1000, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","purple","pink"], colisionStatus = false, visualMode = true, maxMoves = 200, manualMode = false;
+var testTime = 0, turnTime = 0, moves = [], atualizationFrame, time = 0, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","purple","pink"], colisionStatus = false, visualMode = true, maxMoves = 100, manualMode = false;
 var playerSet = [];
 
 window.onload = function(){
@@ -113,9 +113,10 @@ function gameReset(){
 		playerSet[x].player.reset(x * 20, 460);
 		playerSet[x].player.score = 0;
 		paintPlayer(x);	
+		
+	}
 		testTime++;	// It's can explode.
 		turnTime = -1;
-	}
 }
 function tryReset(){
 	let gameOn = false;
@@ -157,13 +158,13 @@ function setScore(playerNumber){
 				playerSet[playerNumber].player.score -= 200;
 			}else{
 				if(playerSet[playerNumber].player.lastXPosition < playerSet[playerNumber].player.px){
-					playerSet[playerNumber].player.score += (playerSet[playerNumber].player.px/20) + 15;
+					playerSet[playerNumber].player.score += (playerSet[playerNumber].player.px/20) * 15;
 				}else if(playerSet[playerNumber].player.lastXPosition > playerSet[playerNumber].player.px){
-					playerSet[playerNumber].player.score -= (playerSet[playerNumber].player.lastXPosition/20) + 15;
+					playerSet[playerNumber].player.score -= (playerSet[playerNumber].player.lastXPosition/20) * 15;
 				}else if(playerSet[playerNumber].player.lastYPosition < playerSet[playerNumber].player.py){
-					playerSet[playerNumber].player.score += (((playerSet[playerNumber].player.py - 460) / 20) * -1) +15; 
+					playerSet[playerNumber].player.score += (((playerSet[playerNumber].player.py - 460) / 20) * -1) * 15; 
 				}else if(playerSet[playerNumber].player.lastYPosition > playerSet[playerNumber].player.py){
-					playerSet[playerNumber].player.score -=(((playerSet[playerNumber].player.lastYPosition - 460) / 20) * -1) +15;
+					playerSet[playerNumber].player.score -=(((playerSet[playerNumber].player.lastYPosition - 460) / 20) * -1) +18;
 				}
 			}
 		break;
@@ -205,6 +206,7 @@ function setScore(playerNumber){
 		playerSet[playerNumber].player.lastXPosition = playerSet[playerNumber].player.px;	
 		playerSet[playerNumber].player.lastYPosition = playerSet[playerNumber].player.py;		
 		playerSet[playerNumber].player.lastSection = aux;
+		//playerSet[playerNumber].player.score -= 1;
 }
 function section(playerNumber){
 
