@@ -1,11 +1,11 @@
-function GeneticAlgorithm (maxMoves){
+function GeneticAlgorithm (maxMoves,maker){
 
     this.population = [];
     this.generationSize = 50;
     this.maxMoves = maxMoves;
     this.scoreSet = [];
-    this.mutationRate = 25;
-
+    this.mutationRate = 100;
+    this.maker = maker;
     this.save = function(score, time, invalidateTurn){
         
         this.scoreSet[time % this.generationSize] = score;
@@ -57,7 +57,7 @@ function GeneticAlgorithm (maxMoves){
         console.log(debug/50);
     }
 
-    this.crossOver = function(){
+    this.crossOver = function(time){
         let aux = 0, valid = 0, sum = 0, one = 0, two = 0, counter = 0, idxSize = 0, acumulation = 0;
         
         while(aux <= this.generationSize && this.scoreSet[aux] > 0 ){

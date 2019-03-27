@@ -1,5 +1,5 @@
-var testTime = 0, turnTime = 0, moves = [], atualizationFrame, time = 0, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","purple","pink"], colisionStatus = false, visualMode = true, maxMoves = 100, manualMode = false;
-var playerSet = [];
+var testTime = 0, turnTime = 0, moves = [], atualizationFrame, time = 1000, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","purple","pink"], colisionStatus = false, visualMode = true, maxMoves = 200, manualMode = false;
+var playerSet = [], algorithms = [];
 
 window.onload = function(){
 
@@ -60,13 +60,17 @@ function colision(){
 function executePlayers(){
 	for(let x = 0; x < numberOfPlayers; x++){
 		if(playerSet[x].player.alive){
-			paintPlayer(x);
-			if(!manualMode){
-				setScore(x);
-				if(moves[x][turnTime % playerSet[x].algorithm.generationSize] == 0){
-					playerSet[x].player.movement(Math.floor((Math.random() * 4) + 1));
-				}else{
-					playerSet[x].player.movement(moves[x][turnTime % playerSet[x].algorithm.generationSize]);
+			if(turnTime >= maxMoves){
+				playerSet[x].player.alive = false;
+			}else{
+				paintPlayer(x);
+				if(!manualMode){
+					setScore(x);
+					if(moves[x][turnTime % playerSet[x].algorithm.generationSize] == 0){
+						playerSet[x].player.movement(Math.floor((Math.random() * 4) + 1));
+					}else{
+						playerSet[x].player.movement(moves[x][turnTime % playerSet[x].algorithm.generationSize]);
+					}
 				}
 			}
 		}
@@ -92,18 +96,44 @@ function paintPlayer(playerNumber){
 	}
 }
 
-function newPlayer(){
+function newPlayer(name){
 	
 	if(numberOfPlayers > 4){
 		alert("The max number of player is 5.");
 	}else{ 
-		playerSet[numberOfPlayers] = new NewPlayer(
-			new Player(setOfColors[numberOfPlayers], (numberOfPlayers) * 20, 460),
-			new GeneticAlgorithm(maxMoves)
-		);
-		moves[numberOfPlayers] = playerSet[numberOfPlayers].algorithm.start();
-		paintPlayer(numberOfPlayers);
-		numberOfPlayers++;
+		let found = true;
+		let x = document.getElementById("algortihm").value;
+		let y = document.getElementById("maker").value;
+
+			switch(x){
+
+				case "IAGenetic":
+				playerSet[numberOfPlayers] = new NewPlayer(
+					new Player(setOfColors[numberOfPlayers], (numberOfPlayers) * 20, 460),
+					new GeneticAlgorithm(maxMoves,y)
+				);
+				break;
+
+				case "IAGenetic2":
+				playerSet[numberOfPlayers] = new NewPlayer(
+					new Player(setOfColors[numberOfPlayers], (numberOfPlayers) * 20, 460),
+					new GeneticAlgorithm2(maxMoves,y)
+				);
+				break;
+
+				default:
+					alert("Algorithm not found");
+					found = false;
+				break;
+			}
+		
+		if(found){
+			document.getElementById("playerAlgorithm"+(numberOfPlayers+1)).innerHTML = x + ",  " + y;
+			moves[numberOfPlayers] = playerSet[numberOfPlayers].algorithm.start();
+			paintPlayer(numberOfPlayers);
+			numberOfPlayers++;	
+		}
+	
 	}
 }
 function gameReset(){
@@ -113,7 +143,6 @@ function gameReset(){
 		playerSet[x].player.reset(x * 20, 460);
 		playerSet[x].player.score = 0;
 		paintPlayer(x);	
-		
 	}
 		testTime++;	// It's can explode.
 		turnTime = -1;
@@ -233,6 +262,14 @@ function changeColisionStatus(){
 
 function changeVisualMode(){
 	visualMode = document.getElementById("visualCheck").checked;
+	ctx.fillStyle = "grey";
+	ctx.fillRect(0,0, stage.width, stage.height);
+	ctx.fillStyle = "grey";
+	ctx.fillRect(0,0, stage.width, stage.height);
+	ctx.fillStyle = "yellow";
+	ctx.fillRect(100,100,400,400);
+	ctx.fillStyle = "green";
+	ctx.fillRect(0,480,100,20);
 }
 
 function changemanualMode(){
