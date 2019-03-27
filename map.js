@@ -162,9 +162,9 @@ function gameReset(){
 		playerSet[x].player.reset(x * 20, 460);
 		playerSet[x].player.score = 0;
 		paintPlayer(x);	
+	}
 		testTime++;	// It's can explode.
 		turnTime = -1;
-	}
 }
 function tryReset(){
 	let gameOn = false;
