@@ -19,8 +19,8 @@ function GeneticAlgorithm2 (maxMoves){
     this.selection = function(time){
 
         //Selection:
-      //  this.sort();
-       // this.crossOver(time);
+        this.sort();
+        this.crossOver(time);
 
     }
 
@@ -56,65 +56,8 @@ function GeneticAlgorithm2 (maxMoves){
         }
     }
 
-    this.crossOver = function(){
-        let aux = 0, valid = 0, sum = 0, one = 0, two = 0, counter = 0, idxSize = 0, acumulation = 0;
-        
-        while(aux <= this.generationSize && this.scoreSet[aux] != 0 ){
-            aux++;
-            valid++;
-            sum += this.scoreSet[aux];
-        }
-        
-        let arr = [];
-        for(let a = 0; a < this.generationSize; a++){
-            arr[a] = [];
-
-            randomOne = Math.floor((Math.random() * sum) + 1);
-            randomTwo = Math.floor((Math.random() * sum) + 1);
-
-            aux = 0;
-            counter = 0;
-            while(counter <= randomOne){
-                counter += this.scoreSet[aux];
-                one++;
-                aux++;
-            }
-            one--;
-            
-            counter = 0;
-            aux = 0;
-            
-            while(counter <= randomTwo){
-                counter += this.scoreSet[aux];
-                two++;
-                aux++;
-            }
-            two--;
-
-            for(let b = 0; b < this.maxMoves; b++){
-                if(this.population[one][b] == 0 && this.population[two][b] == 0){
-                    for(let c = b; c < this.maxMoves; c++){
-                        arr[a][c] = 0;
-                    }
-                    b = this.maxMoves;
-                }else{
-                    if(b%2 == 0 && this.population[one][b] != 0){
-                        arr[a][b] = this.population[one][b];
-                    }else{
-                        arr[a][b] = this.population[two][b];
-                    }   
-                let aux2 = this.mutation();
-                aux2 == 1 ? arr[a][b] = Math.floor((Math.random() * 4) + 1) : arr[a][b] += 0;  
-                }
-               
-            }
- 
-            one = 0;
-            two = 0;
-            aux = 0;
-        }
-
-        this.population = arr;
+    this.crossOver = function(time){
+        this.invalidation(5,time)
     }
 
     this.mutation = function(){

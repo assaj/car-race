@@ -56,7 +56,7 @@ function GeneticAlgorithm (maxMoves){
         }
     }
 
-    this.crossOver = function(){
+    this.crossOver = function(time){
         let aux = 0, valid = 0, sum = 0, one = 0, two = 0, counter = 0, idxSize = 0, acumulation = 0;
         
         while(aux <= this.generationSize && this.scoreSet[aux] != 0 ){

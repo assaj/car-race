@@ -1,5 +1,5 @@
 var testTime = 0, turnTime = 0, moves = [], atualizationFrame, time = 1000, ctx, stage, numberOfPlayers = 0, colisorNumber, setOfColors = ["red","blue","black","purple","pink"], colisionStatus = false, visualMode = true, maxMoves = 200, manualMode = false;
-var playerSet = [];
+var playerSet = [], algorithms = [];
 
 window.onload = function(){
 
@@ -92,39 +92,65 @@ function paintPlayer(playerNumber){
 	}
 }
 
-function newPlayer(){
+function newPlayer(name){
 	
 	if(numberOfPlayers > 4){
 		alert("The max number of player is 5.");
 	}else{ 
 		let found = true;
-		let x = document.getElementById("algortihm").value;
-		switch(x){
+		if(name == "algorithm"){
+			let x = document.getElementById("algortihm").value;
+			switch(x){
 
-			case "IAGenetic":
-			playerSet[numberOfPlayers] = new NewPlayer(
-				new Player(setOfColors[numberOfPlayers], (numberOfPlayers) * 20, 460),
-				new GeneticAlgorithm(maxMoves)
-			);
-			break;
+				case "IAGenetic":
+				playerSet[numberOfPlayers] = new NewPlayer(
+					new Player(setOfColors[numberOfPlayers], (numberOfPlayers) * 20, 460),
+					new GeneticAlgorithm(maxMoves)
+				);
+				break;
 
-			case "IAGenetic2":
-			playerSet[numberOfPlayers] = new NewPlayer(
-				new Player(setOfColors[numberOfPlayers], (numberOfPlayers) * 20, 460),
-				new GeneticAlgorithm2(maxMoves)
-			);
-			break;
+				case "IAGenetic2":
+				playerSet[numberOfPlayers] = new NewPlayer(
+					new Player(setOfColors[numberOfPlayers], (numberOfPlayers) * 20, 460),
+					new GeneticAlgorithm2(maxMoves)
+				);
+				break;
 
-			default:
-				alert("Algorithm not found");
-				found = false;
-			break;
+				default:
+					alert("Algorithm not found");
+					found = false;
+				break;
+			}
+			document.getElementById("playerAlgorithm"+(numberOfPlayers+1)).innerHTML = x;
+		}else{
+			let y = document.getElementById("maker").value;
+			switch(y){
+
+				case "Alex<assaj>":
+				playerSet[numberOfPlayers] = new NewPlayer(
+					new Player(setOfColors[numberOfPlayers], (numberOfPlayers) * 20, 460),
+					new GeneticAlgorithm(maxMoves)
+				);
+				break;
+
+				case "Alex2<assaj>":
+				playerSet[numberOfPlayers] = new NewPlayer(
+					new Player(setOfColors[numberOfPlayers], (numberOfPlayers) * 20, 460),
+					new GeneticAlgorithm2(maxMoves)
+				);
+				break;
+
+				default:
+					alert("Algorithm not found");
+					found = false;
+				break;
+			}
+			document.getElementById("playerAlgorithm"+(numberOfPlayers+1)).innerHTML = y;
 		}
 		if(found){
 			moves[numberOfPlayers] = playerSet[numberOfPlayers].algorithm.start();
 			paintPlayer(numberOfPlayers);
 			numberOfPlayers++;	
-			document.getElementById("playerAlgorithm"+numberOfPlayers).innerHTML = x;
 		}
 	
 	}
