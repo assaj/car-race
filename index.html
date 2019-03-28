@@ -3,19 +3,49 @@
 <head>
 	<title>CAR RACE</title>
 </head>
+<style>
+		table {
+		  border-collapse: collapse;
+		  border: 1px solid #000;
+		}
+		td {
+		  width: 20px;
+		  height: 20px;
+		  border: 1px solid #000;
+		  text-align: center;
+		  vertical-align: center;
+		  font-family: monospace;
+		  font-size: 18px;
+		  position: relative;
+		}
+		td.pixel {
+		  width: 4px;
+		  height: 4px;
+		  border: 0;
+		}
+		.pixel-index {
+		  font-size: 10px;
+		  display: inline-block;
+		  position: absolute;
+		  top: 2px;
+		  right: 2px;
+		  color: #999;
+		}
+	  </style>
+
 <body>
+<div id="map" style= "float: left;">
+
+</div>
 	<section style= "float: right;">
 		
 	<div id="panel" style= "float: right; padding: 5px;">
 		<div style= "float: left ; ">
-		<button onclick="newPlayer('algorithm')" style="width: 50px; height: 60px; background-color: green">New </br>player</button>
-		<div style= "float: right;">
-		Algorithm:<input id="algortihm" value="IAGenetic" style= " background-color: rgb(0, 255, 255)"></br></br>
-		Maker:<input id="maker" value="Alex<assaj>" style= " background-color: rgb(0, 255, 255)">
-
-		</div>
-		
-		</div>
+			<div style= "float: right;">
+				Algorithm:<input id="algortihm" value="IAGenetic" style= " background-color: rgb(0, 255, 255)"></br></br>
+				Maker:<input id="maker" value="Alex<assaj>" style= " background-color: rgb(0, 255, 255); width: 150px">
+			</div>
+		</div><button onclick="newPlayer('algorithm')" style="width: 50px; height: 60px; background-color: green">New </br>player</button>
 		<div>
 	</br></br>
 	
@@ -29,7 +59,6 @@
 		
 	</div>
 	</section>
-	<aside style = "width: 600px; height: 600px; float: left;"><canvas id="stage" width="600" height="600"></canvas></aside>
 </body>
 <div style = "padding: 20px;">
 	
@@ -61,5 +90,6 @@
 <script src = "coreObjects.js"type="text/javascript"></script>
 <script src = "IAGenetic2.js"type="text/javascript"></script>
 <script src = "IAGenetic.js"type="text/javascript"></script>
-<script src = "map.js"type="text/javascript"></script>
+<script src = "map2.js"type="text/javascript"></script>
+
 </html>
